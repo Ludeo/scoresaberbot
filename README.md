@@ -31,11 +31,15 @@ Stops the tracking system
 ![](https://i.imgur.com/pqpu2v9.png)
 ### profile
 ![](https://i.imgur.com/Yny5z8g.png)
+![](https://i.imgur.com/3PaaZWk.png)
 ### recent
 ![](https://i.imgur.com/Ajh7A3E.png)
+![](https://i.imgur.com/6IPrypn.png)
 ### top5
 ![](https://i.imgur.com/izgK2qQ.png)
+![](https://i.imgur.com/3m4oyjK.png)
 ### top
 ![](https://i.imgur.com/fPhjn8X.png)
+![](https://i.imgur.com/k8GTPTU.png)
 ### updatename
 ![](https://i.imgur.com/kBuH3wR.png)
