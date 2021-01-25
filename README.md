@@ -24,13 +24,15 @@ Download the repository and run the code. The bot should have created a config.x
 Adds the score saber account to the tracking system
 ### deletetrack [scoresaberid]
 Deletes the score saber account from the tracking system
+### logout
+Logs out the bot so he is instantly offline before closing the program
 ### starttrack
 Starts the tracking system
 ### stoptrack
 Stops the tracking system
 ## Everyone
 ### credits
-![](https://i.imgur.com/OtX8X47.png)
+![](https://i.imgur.com/7I4Dtpi.png)
 ### link
 ![](https://i.imgur.com/pqpu2v9.png)
 ### profile

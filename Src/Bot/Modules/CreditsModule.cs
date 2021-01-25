@@ -22,7 +22,8 @@ namespace Bot.Bot.Modules
                 Description = "This bot was programmed by Ludeo\n[Github](https://github.com/Ludeo/)\n" +
                               "[Code](https://github.com/Ludeo/scoresaberbot)\nDiscord: Ludeo#8554\n" +
                               "If you have any questions, feel free to write me a DM on Discord or open a issue on " +
-                              "the github repository.",
+                              "the github repository.\n\nAlso thanks to " +
+                              "[ppotatoo](https://github.com/ppotatoo/ssapi/wiki) for making the score saber api wiki :)",
                 ThumbnailUrl = "https://cdn.discordapp.com/avatars/311861142114926593/fb1936aec9db8ef087e0627c974fb65e.webp",
             };
 
