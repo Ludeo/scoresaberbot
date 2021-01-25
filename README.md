@@ -2,6 +2,10 @@
 This is a private discord bot that me and some friends are using. If you want to host the bot for yourself, jump to [here](#selfhosting-instructions) and follow the steps.
 
 
+# Score Saber API
+All the informations that I got about the API is from [ppotatoo's](https://github.com/ppotatoo) wiki that you can find [here](https://github.com/ppotatoo/ssapi/wiki). Thanks for figuring that stuff out ppotatoo ^^
+
+
 # Selfhosting Instructions
 Download the repository and run the code. The bot should have created a config.xml file now. Fill out all of the parameters and run the bot again (If you don't fill out everything, the bot might not work correctly). Now everything should work and the bot will create missing xml files, when he needs them. For the possible config parameters, go to [here](#config-parameters).
 
