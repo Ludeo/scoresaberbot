@@ -5,8 +5,15 @@ using Discord.Commands;
 
 namespace Bot.Bot.Modules
 {
+    /// <summary>
+    ///     Module for the top5 command.
+    /// </summary>
     public class Top5Module : ModuleBase<SocketCommandContext>
     {
+        /// <summary>
+        ///     Function that gets executed when someone uses the top5 command.
+        /// </summary>
+        /// <returns> . </returns>
         [Command("top5")]
         public async Task Top5Async()
         {

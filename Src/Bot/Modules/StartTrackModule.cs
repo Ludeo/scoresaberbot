@@ -99,7 +99,10 @@ namespace Bot.Bot.Modules
                     embedBuilder.AddField("Artist", score.SongAuthorName, true);
                     embedBuilder.AddField("Mapper", score.LevelAuthorName, true);
                     embedBuilder.AddField("PP", score.Pp, true);
-                    embedBuilder.AddField("Weighted PP", Math.Round(score.Pp * score.Weight * 100) / 100, true);
+                    embedBuilder.AddField(
+                        "Weighted PP",
+                        Math.Round(score.Pp * score.Weight * 100) / 100,
+                        true);
 
                     embedBuilder.AddField(
                         "Accuracy",

@@ -8,7 +8,7 @@ namespace Bot
     /// <summary>
     ///     Class that provides help functions.
     /// </summary>
-    public class HelpFunctions
+    public static class HelpFunctions
     {
         /// <summary>
         ///     Loads the config.xml file.
@@ -18,7 +18,8 @@ namespace Bot
         {
             CheckConfig();
             ExeConfigurationFileMap configMap = new () { ExeConfigFilename = @"config.xml" };
-            Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+            Configuration config =
+                ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
 
             return config;
         }
@@ -31,7 +32,8 @@ namespace Bot
         {
             CheckPlayers();
             ExeConfigurationFileMap playersMap = new () { ExeConfigFilename = @"players.xml" };
-            Configuration players = ConfigurationManager.OpenMappedExeConfiguration(playersMap, ConfigurationUserLevel.None);
+            Configuration players =
+                ConfigurationManager.OpenMappedExeConfiguration(playersMap, ConfigurationUserLevel.None);
 
             return players;
         }
@@ -44,9 +46,10 @@ namespace Bot
         {
             CheckPlayerNames();
             ExeConfigurationFileMap playerNamesMap = new () { ExeConfigFilename = @"playernames.xml" };
-            Configuration playernames = ConfigurationManager.OpenMappedExeConfiguration(playerNamesMap, ConfigurationUserLevel.None);
+            Configuration playerNames =
+                ConfigurationManager.OpenMappedExeConfiguration(playerNamesMap, ConfigurationUserLevel.None);
 
-            return playernames;
+            return playerNames;
         }
 
         /// <summary>
@@ -57,9 +60,25 @@ namespace Bot
         {
             CheckTrackedPlayers();
             ExeConfigurationFileMap trackedPlayersMap = new () { ExeConfigFilename = @"trackedplayers.xml" };
-            Configuration trackedPlayers = ConfigurationManager.OpenMappedExeConfiguration(trackedPlayersMap, ConfigurationUserLevel.None);
+            Configuration trackedPlayers =
+                ConfigurationManager.OpenMappedExeConfiguration(trackedPlayersMap, ConfigurationUserLevel.None);
 
             return trackedPlayers;
+        }
+
+        /// <summary>
+        ///     Loads the playerranks.xml file.
+        /// </summary>
+        /// <returns> A Configuration object with the data of the playerranks.xml file. </returns>
+        public static Configuration LoadPlayerRanks()
+        {
+            CheckPlayerRanks();
+            ExeConfigurationFileMap playerRanksMap = new () { ExeConfigFilename = @"playerranks.xml" };
+
+            Configuration playerRanks =
+                ConfigurationManager.OpenMappedExeConfiguration(playerRanksMap, ConfigurationUserLevel.None);
+
+            return playerRanks;
         }
 
         private static void CheckConfig()
@@ -70,11 +89,14 @@ namespace Bot
 
                 StringBuilder sb = new ();
                 sb.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-                sb.AppendLine("<configuration xmlns=\"http://schemas.microsoft.com/.NetConfiguration/v2.0\"></configuration>");
+                sb.AppendLine("<configuration xmlns=\"http://schemas.microsoft.com/.NetConfiguration/v2.0\">" +
+                              "</configuration>");
                 File.WriteAllText(@"config.xml", sb.ToString());
 
                 ExeConfigurationFileMap configMap = new () { ExeConfigFilename = @"config.xml" };
-                Configuration config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
+                Configuration config = ConfigurationManager.OpenMappedExeConfiguration(
+                    configMap,
+                    ConfigurationUserLevel.None);
 
                 config.AppSettings.Settings.Add("token", string.Empty);
                 config.AppSettings.Settings.Add("prefix", "b!");
@@ -98,13 +120,14 @@ namespace Bot
 
                 StringBuilder sb = new ();
                 sb.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-                sb.AppendLine("<configuration xmlns=\"http://schemas.microsoft.com/.NetConfiguration/v2.0\"></configuration>");
+                sb.AppendLine("<configuration xmlns=\"http://schemas.microsoft.com/.NetConfiguration/v2.0\">" +
+                              "</configuration>");
                 File.WriteAllText(@"players.xml", sb.ToString());
 
                 ExeConfigurationFileMap playersMap = new () { ExeConfigFilename = @"players.xml" };
-                Configuration players = ConfigurationManager.OpenMappedExeConfiguration(playersMap, ConfigurationUserLevel.None);
-
-                players.AppSettings.Settings.Add("311861142114926593", "76561198143629166");
+                Configuration players = ConfigurationManager.OpenMappedExeConfiguration(
+                    playersMap,
+                    ConfigurationUserLevel.None);
 
                 players.Save();
 
@@ -120,15 +143,16 @@ namespace Bot
 
                 StringBuilder sb = new ();
                 sb.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-                sb.AppendLine("<configuration xmlns=\"http://schemas.microsoft.com/.NetConfiguration/v2.0\"></configuration>");
+                sb.AppendLine("<configuration xmlns=\"http://schemas.microsoft.com/.NetConfiguration/v2.0\">" +
+                              "</configuration>");
                 File.WriteAllText(@"playernames.xml", sb.ToString());
 
                 ExeConfigurationFileMap playerNamesMap = new () { ExeConfigFilename = @"playernames.xml" };
-                Configuration playernames = ConfigurationManager.OpenMappedExeConfiguration(playerNamesMap, ConfigurationUserLevel.None);
+                Configuration playerNames = ConfigurationManager.OpenMappedExeConfiguration(
+                    playerNamesMap,
+                    ConfigurationUserLevel.None);
 
-                playernames.AppSettings.Settings.Add("76561198143629166", "Ludeo");
-
-                playernames.Save();
+                playerNames.Save();
 
                 Console.WriteLine("playernames.xml successfully created.");
             }
@@ -142,17 +166,41 @@ namespace Bot
 
                 StringBuilder sb = new ();
                 sb.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-                sb.AppendLine("<configuration xmlns=\"http://schemas.microsoft.com/.NetConfiguration/v2.0\"></configuration>");
+                sb.AppendLine("<configuration xmlns=\"http://schemas.microsoft.com/.NetConfiguration/v2.0\">" +
+                              "</configuration>");
                 File.WriteAllText(@"trackedplayers.xml", sb.ToString());
 
                 ExeConfigurationFileMap trackedPlayersMap = new () { ExeConfigFilename = @"trackedplayers.xml" };
-                Configuration trackedPlayers = ConfigurationManager.OpenMappedExeConfiguration(trackedPlayersMap, ConfigurationUserLevel.None);
-
-                trackedPlayers.AppSettings.Settings.Add("76561198143629166", "2021-01-25T01:36:25.000Z");
+                Configuration trackedPlayers = ConfigurationManager.OpenMappedExeConfiguration(
+                    trackedPlayersMap,
+                    ConfigurationUserLevel.None);
 
                 trackedPlayers.Save();
 
                 Console.WriteLine("trackedplayers.xml successfully created.");
+            }
+        }
+
+        private static void CheckPlayerRanks()
+        {
+            if (!File.Exists("playerranks.xml"))
+            {
+                Console.WriteLine("Playerranks file \"playerranks.xml\" does not exist. Creating...");
+
+                StringBuilder sb = new ();
+                sb.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                sb.AppendLine("<configuration xmlns=\"http://schemas.microsoft.com/.NetConfiguration/v2.0\">" +
+                              "</configuration>");
+                File.WriteAllText(@"playerranks.xml", sb.ToString());
+
+                ExeConfigurationFileMap playerRanksMap = new () { ExeConfigFilename = @"playerranks.xml" };
+                Configuration playerRanks = ConfigurationManager.OpenMappedExeConfiguration(
+                    playerRanksMap,
+                    ConfigurationUserLevel.None);
+
+                playerRanks.Save();
+
+                Console.WriteLine("playerranks.xml successfully created.");
             }
         }
     }

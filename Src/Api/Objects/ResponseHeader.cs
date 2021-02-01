@@ -36,12 +36,7 @@ namespace Bot.Api.Objects
         }
 
         /// <summary>
-        ///     Gets the maximum RateLimit of calls you can make to the Api.
-        /// </summary>
-        public int RateLimit { get; }
-
-        /// <summary>
-        ///     Gets the remaining ammount of calls you can make till the reset.
+        ///     Gets the remaining amount of calls you can make till the reset.
         /// </summary>
         public int RateLimitRemaining { get; }
 
@@ -49,5 +44,10 @@ namespace Bot.Api.Objects
         ///     Gets the time of the limit reset.
         /// </summary>
         public int RateLimitReset { get; }
+
+        /// <summary>
+        ///     Gets the maximum RateLimit of calls you can make to the Api.
+        /// </summary>
+        private int RateLimit { get; }
     }
 }

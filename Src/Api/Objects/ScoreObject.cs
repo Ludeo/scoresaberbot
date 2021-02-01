@@ -38,7 +38,7 @@ namespace Bot.Api.Objects
         public string Mods { get; set; }
 
         /// <summary>
-        ///     Gets or sets the ammount of pp the player got on the map.
+        ///     Gets or sets the amount of pp the player got on the map.
         /// </summary>
         [JsonPropertyName("pp")]
         public double Pp { get; set; }

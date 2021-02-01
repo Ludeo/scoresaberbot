@@ -17,7 +17,7 @@ namespace Bot.Bot.Modules
         [Command("help")]
         public async Task HelpAllAsync()
         {
-            EmbedBuilder embedBuilder = new()
+            EmbedBuilder embedBuilder = new ()
             {
                 Title = "Help",
             };
@@ -25,6 +25,15 @@ namespace Bot.Bot.Modules
             Configuration config = HelpFunctions.LoadConfig();
             string prefix = config.AppSettings.Settings["prefix"].Value;
 
+            embedBuilder.AddField(
+                prefix + " credits",
+                "Shows the credits for the bot",
+                true);
+
+            embedBuilder.AddField(
+                prefix + "leaderboard",
+                "Shows a score saber leaderboard of the discord with all players, that linked their accounts",
+                true);
             embedBuilder.AddField(
                 prefix + "link [scoresaberid]",
                 "Links or updates your discord account to the score saber account",
@@ -51,12 +60,6 @@ namespace Bot.Bot.Modules
                 prefix + "top | " + prefix + "top [scoresaberid]",
                 "Returns the top play of your linked account or returns the recent top play of the given" +
                 "score saber account",
-                true);
-
-            embedBuilder.AddField(
-                prefix + "updatename | " + prefix + "updatename[scoresaberid]",
-                "Updates your score saber name for the bot or updates the score saber name of the given" +
-                "score saber account for the bot",
                 true);
 
             await this.Context.Channel.SendMessageAsync(string.Empty, false, embedBuilder.Build());
@@ -114,18 +117,16 @@ namespace Bot.Bot.Modules
                         "you can just use \"" + prefix + "top\" to view your top play without giving a score saber id.";
 
                     break;
-                case "updatename":
-                    embedBuilder.Description =
-                        "With \"" + prefix + "updatename [scoresaberid]\" you can update the username of the given" +
-                        "score saber account for the bot.\nIf you already linked your score saber account to your" +
-                        " discord account, you can just use \"" + prefix + "updatename\" to update your score saber " +
-                        "name for the bot.\n\nNOTE: This will only update your score saber name for the BOT. It will " +
-                        "not update your score saber name for score saber itself!";
-
-                    break;
                 case "credits":
                     embedBuilder.Description =
                         "\"" + prefix + "credits\" will show information about the creator of the bot.";
+
+                    break;
+                case "leaderboard":
+                    embedBuilder.Description =
+                        "\"" + prefix + "leaderboard\" will show a leaderboard of the top10 score saber players of " +
+                        "the server, that have their accounts linked. It will also show your position on " +
+                        "the leaderboard";
 
                     break;
                 default:

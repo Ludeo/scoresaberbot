@@ -3,7 +3,7 @@ This is a private discord bot that me and some friends are using. If you want to
 
 
 # Score Saber API
-All the informations that I got about the API is from [ppotatoo's](https://github.com/ppotatoo) wiki that you can find [here](https://github.com/ppotatoo/ssapi/wiki). Thanks for figuring that stuff out ppotatoo ^^
+All the information that I got about the API is from [ppotatoo's](https://github.com/ppotatoo) wiki that you can find [here](https://github.com/ppotatoo/ssapi/wiki). Thanks for figuring that stuff out ppotatoo ^^
 
 
 # Selfhosting Instructions
@@ -32,7 +32,13 @@ Starts the tracking system
 Stops the tracking system
 ## Everyone
 ### credits
+![](https://i.imgur.com/aNnpCoZ.png)
 ![](https://i.imgur.com/7I4Dtpi.png)
+### help
+![](https://i.imgur.com/LBChmpO.png)
+### leaderboard
+![](https://i.imgur.com/jlCuMkU.png)
+![](https://i.imgur.com/BFsNaTV.png)
 ### link
 ![](https://i.imgur.com/pqpu2v9.png)
 ### profile
@@ -47,5 +53,3 @@ Stops the tracking system
 ### top
 ![](https://i.imgur.com/fPhjn8X.png)
 ![](https://i.imgur.com/k8GTPTU.png)
-### updatename
-![](https://i.imgur.com/kBuH3wR.png)

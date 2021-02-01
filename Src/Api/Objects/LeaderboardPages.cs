@@ -8,7 +8,7 @@ namespace Bot.Api.Objects
     public class LeaderboardPages
     {
         /// <summary>
-        ///     Gets or sets the ammount of pages.
+        ///     Gets or sets the amount of pages.
         /// </summary>
         [JsonPropertyName("pages")]
         public int Pages { get; set; }

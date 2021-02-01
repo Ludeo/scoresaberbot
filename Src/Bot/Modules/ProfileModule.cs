@@ -25,6 +25,41 @@ namespace Bot.Bot.Modules
 
             Player player = await api.GetPlayerAsync(playerId);
 
+            Configuration playerNames = HelpFunctions.LoadPlayerNames();
+
+            if (playerNames.AppSettings.Settings.AllKeys!.Any(x => x == player.PlayerInfo.PlayerId))
+            {
+                if (playerNames.AppSettings.Settings[player.PlayerInfo.PlayerId].Value != player.PlayerInfo.PlayerName)
+                {
+                    playerNames.AppSettings.Settings.Remove(player.PlayerInfo.PlayerId);
+                    playerNames.AppSettings.Settings.Add(player.PlayerInfo.PlayerId, player.PlayerInfo.PlayerName);
+                }
+            }
+            else
+            {
+                playerNames.AppSettings.Settings.Add(player.PlayerInfo.PlayerId, player.PlayerInfo.PlayerName);
+            }
+
+            playerNames.Save();
+
+            Configuration playerRanks = HelpFunctions.LoadPlayerRanks();
+
+            if (playerRanks.AppSettings.Settings.AllKeys!.Any(x => x == player.PlayerInfo.PlayerId))
+            {
+                if (int.Parse(playerRanks.AppSettings.Settings[player.PlayerInfo.PlayerId].Value!)
+                    != player.PlayerInfo.Rank)
+                {
+                    playerRanks.AppSettings.Settings.Remove(player.PlayerInfo.PlayerId);
+                    playerRanks.AppSettings.Settings.Add(player.PlayerInfo.PlayerId, player.PlayerInfo.Rank.ToString());
+                }
+            }
+            else
+            {
+                playerRanks.AppSettings.Settings.Add(player.PlayerInfo.PlayerId, player.PlayerInfo.Rank.ToString());
+            }
+
+            playerRanks.Save();
+
             int weeklyChange = int.Parse(player.PlayerInfo.RankHistory.Split(",")[^7]) - player.PlayerInfo.Rank;
             string weeklyChangeText = "```diff\n- " + -weeklyChange + "```";
 
@@ -87,7 +122,8 @@ namespace Bot.Bot.Modules
         {
             Configuration players = HelpFunctions.LoadPlayers();
 
-            bool exists = players.AppSettings.Settings.AllKeys!.Any(k => k == this.Context.Message.Author.Id.ToString());
+            bool exists = players.AppSettings.Settings.AllKeys!
+                .Any(k => k == this.Context.Message.Author.Id.ToString());
 
             if (exists)
             {

@@ -39,7 +39,7 @@ namespace Bot.Api.Objects
         public int CountryRank { get; set; }
 
         /// <summary>
-        ///     Gets or sets the ammount of PP from a player.
+        ///     Gets or sets the amount of PP from a player.
         /// </summary>
         [JsonPropertyName("pp")]
         public double Pp { get; set; }

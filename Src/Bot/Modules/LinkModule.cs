@@ -20,7 +20,8 @@ namespace Bot.Bot.Modules
         {
             Configuration players = HelpFunctions.LoadPlayers();
 
-            bool exists = players.AppSettings.Settings.AllKeys!.Any(k => k == this.Context.Message.Author.Id.ToString());
+            bool exists = players.AppSettings.Settings.AllKeys!
+                .Any(k => k == this.Context.Message.Author.Id.ToString());
 
             if (exists)
             {
