@@ -27,6 +27,7 @@ namespace Bot.Bot.Modules
                               "score saber api wiki :)",
                 ThumbnailUrl =
                     "https://cdn.discordapp.com/avatars/311861142114926593/fb1936aec9db8ef087e0627c974fb65e.webp",
+                Color = Color.Magenta,
             };
 
             await this.Context.Channel.SendMessageAsync(string.Empty, false, embedBuilder.Build());

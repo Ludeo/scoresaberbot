@@ -31,6 +31,7 @@ namespace Bot.Bot.Modules
                     Title = player.PlayerName,
                     ThumbnailUrl = "https://new.scoresaber.com" + player.Avatar,
                     Url = "https://new.scoresaber.com/u/" + player.PlayerId,
+                    Color = Color.Green,
                 };
 
                 embedBuilder.AddField("Rank", player.Rank, true);

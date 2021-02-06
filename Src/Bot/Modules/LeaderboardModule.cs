@@ -124,8 +124,10 @@ namespace Bot.Bot.Modules
             {
                 Title = "Score Saber Leaderboard of " + this.Context.Guild.Name,
                 Description = sb.ToString(),
+                Color = Color.Teal,
             };
 
+            embedBuilder.WithFooter("API Calls Left: " + api.RateLimitRemaining);
             await this.Context.Channel.SendMessageAsync(string.Empty, false, embedBuilder.Build());
         }
     }

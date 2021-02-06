@@ -20,6 +20,7 @@ namespace Bot.Bot.Modules
             EmbedBuilder embedBuilder = new ()
             {
                 Title = "Help",
+                Color = Color.Gold,
             };
 
             Configuration config = HelpFunctions.LoadConfig();
@@ -76,6 +77,7 @@ namespace Bot.Bot.Modules
             EmbedBuilder embedBuilder = new ()
             {
                 Title = "Help for the " + command + " command",
+                Color = Color.Gold,
             };
 
             Configuration config = HelpFunctions.LoadConfig();

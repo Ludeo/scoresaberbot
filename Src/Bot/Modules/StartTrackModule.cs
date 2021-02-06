@@ -86,6 +86,7 @@ namespace Bot.Bot.Modules
                         Title = "New Score from " + playerName,
                         ThumbnailUrl = $"https://scoresaber.com/imports/images/songs/{score.SongHash}.png",
                         Url = $"https://new.scoresaber.com/u/{playerId}",
+                        Color = Color.Red,
                     };
 
                     string fullName = score.SongName + ", " + score.SongSubName;

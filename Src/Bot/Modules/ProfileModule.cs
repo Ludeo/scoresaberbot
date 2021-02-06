@@ -73,6 +73,7 @@ namespace Bot.Bot.Modules
                 Title = player.PlayerInfo.PlayerName,
                 ThumbnailUrl = "https://new.scoresaber.com" + player.PlayerInfo.Avatar,
                 Url = "https://new.scoresaber.com/u/" + player.PlayerInfo.PlayerId,
+                Color = Color.Blue,
             };
 
             embedBuilder.AddField("Player Stats", "\u200B");

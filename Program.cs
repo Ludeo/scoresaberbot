@@ -67,7 +67,9 @@ namespace Bot
 
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
 
-            await Client.SetGameAsync("Beep Saber || b!help");
+            string prefix = config.AppSettings.Settings["prefix"].Value;
+
+            await Client.SetGameAsync($"Beat Saber || {prefix}help");
 
             await Task.Delay(Timeout.Infinite);
         }

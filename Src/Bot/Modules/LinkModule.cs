@@ -34,7 +34,7 @@ namespace Bot.Bot.Modules
                 return;
             }
 
-            players.AppSettings.Settings.Add("311861142114926593", "76561198143629166");
+            players.AppSettings.Settings.Add(this.Context.Message.Author.Id.ToString(), playerId.ToString());
             players.Save();
 
             await this.Context.Channel.SendMessageAsync("Successfully linked your score saber id.");
