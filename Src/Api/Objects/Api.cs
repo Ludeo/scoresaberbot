@@ -79,6 +79,19 @@ namespace Bot.Api.Objects
             this.RateLimitRemaining = header.RateLimitRemaining;
             this.rateLimitReset = header.RateLimitReset;
 
+            foreach (ScoreObject score in topScores.Scores)
+            {
+                score.DifficultyRaw = score.Difficulty switch
+                {
+                    1     => "Easy",
+                    3     => "Normal",
+                    5     => "Hard",
+                    7     => "Expert",
+                    9     => "Expert+",
+                    var _ => score.DifficultyRaw,
+                };
+            }
+
             return topScores;
         }
 
@@ -107,6 +120,19 @@ namespace Bot.Api.Objects
 
             this.RateLimitRemaining = header.RateLimitRemaining;
             this.rateLimitReset = header.RateLimitReset;
+
+            foreach (ScoreObject score in recentScores.Scores)
+            {
+                score.DifficultyRaw = score.Difficulty switch
+                {
+                    1     => "Easy",
+                    3     => "Normal",
+                    5     => "Hard",
+                    7     => "Expert",
+                    9     => "Expert+",
+                    var _ => score.DifficultyRaw,
+                };
+            }
 
             return recentScores;
         }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Globalization;
+using System.Threading.Tasks;
 using Bot.Api.Objects;
 using Discord;
 using Discord.Commands;
@@ -35,8 +36,11 @@ namespace Bot.Bot.Modules
                 };
 
                 embedBuilder.AddField("Rank", player.Rank, true);
-                embedBuilder.AddField("PP", player.Pp, true);
-                embedBuilder.AddField("Country", player.Country, true);
+
+                NumberFormatInfo numberFormatInfo = new () { NumberGroupSeparator = " " };
+
+                embedBuilder.AddField("PP", player.Pp.ToString("#,#.##", numberFormatInfo), true);
+                embedBuilder.AddField("Country", $":flag_{player.Country.ToLower()}:", true);
 
                 string weeklyChangeText = "```diff\n- " + -player.RankDifference + "```";
 

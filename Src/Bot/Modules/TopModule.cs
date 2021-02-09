@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Bot.Api.Objects;
@@ -69,8 +70,15 @@ namespace Bot.Bot.Modules
             embedBuilder.AddField("Map", fullName, true);
             embedBuilder.AddField("Artist", score.SongAuthorName, true);
             embedBuilder.AddField("Mapper", score.LevelAuthorName, true);
-            embedBuilder.AddField("PP", score.Pp, true);
-            embedBuilder.AddField("Weighted PP", Math.Round(score.Pp * score.Weight * 100) / 100, true);
+
+            NumberFormatInfo numberFormatInfo = new () { NumberGroupSeparator = " " };
+
+            embedBuilder.AddField("PP", score.Pp.ToString("#,#.##", numberFormatInfo), true);
+
+            embedBuilder.AddField(
+                "Weighted PP",
+                (Math.Round(score.Pp * score.Weight * 100) / 100).ToString("#,#.##", numberFormatInfo),
+                true);
 
             embedBuilder.AddField(
                 "Accuracy",
@@ -81,7 +89,8 @@ namespace Bot.Bot.Modules
 
             embedBuilder.AddField(
                 "Map Rank",
-                $"[{score.Rank}](https://scoresaber.com/leaderboard/{score.LeaderboardId})",
+                $"[{score.Rank.ToString("#,#", numberFormatInfo)}](https://scoresaber.com/leaderboard/" +
+                $"{score.LeaderboardId})",
                 true);
 
             string mods = score.Mods;
@@ -92,8 +101,17 @@ namespace Bot.Bot.Modules
             }
 
             embedBuilder.AddField("Mods", mods, true);
-            embedBuilder.AddField("Score", score.Score + " / " + score.MaxScore, true);
-            embedBuilder.AddField("Unmodified Score", score.UnmodifiedScore, true);
+
+            embedBuilder.AddField(
+                "Score",
+                score.Score.ToString("#,#", numberFormatInfo) + " / " +
+                score.MaxScore.ToString("#,#", numberFormatInfo),
+                true);
+
+            embedBuilder.AddField(
+                "Unmodified Score",
+                score.UnmodifiedScore.ToString("#,#", numberFormatInfo),
+                true);
 
             embedBuilder.WithFooter("API Calls Left: " + api.RateLimitRemaining);
 

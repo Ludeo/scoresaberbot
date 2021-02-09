@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Bot.Api.Objects;
@@ -60,6 +61,8 @@ namespace Bot.Bot.Modules
 
             playerRanks.Save();
 
+            NumberFormatInfo numberFormatInfo = new () { NumberGroupSeparator = " " };
+
             int weeklyChange = int.Parse(player.PlayerInfo.RankHistory.Split(",")[^7]) - player.PlayerInfo.Rank;
             string weeklyChangeText = "```diff\n- " + -weeklyChange + "```";
 
@@ -77,14 +80,20 @@ namespace Bot.Bot.Modules
             };
 
             embedBuilder.AddField("Player Stats", "\u200B");
-            embedBuilder.AddField("Global Rank", player.PlayerInfo.Rank, true);
+            embedBuilder.AddField(
+                "Global Rank",
+                player.PlayerInfo.Rank.ToString("#,#", numberFormatInfo),
+                true);
 
             embedBuilder.AddField(
                 ":flag_" + player.PlayerInfo.Country.ToLower() + ": Rank",
-                player.PlayerInfo.CountryRank,
+                player.PlayerInfo.CountryRank.ToString("#,#", numberFormatInfo),
                 true);
 
-            embedBuilder.AddField("PP", player.PlayerInfo.Pp, true);
+            embedBuilder.AddField(
+                "PP",
+                player.PlayerInfo.Pp.ToString("#,#.##", numberFormatInfo),
+                true);
 
             if (!string.IsNullOrEmpty(player.PlayerInfo.Role))
             {
@@ -100,15 +109,30 @@ namespace Bot.Bot.Modules
                 "\u200B");
 
             embedBuilder.AddField("Score Information", "\u200B");
-            embedBuilder.AddField("Total Score", player.ScoreStats.TotalScore, true);
-            embedBuilder.AddField("Total Ranked Score", player.ScoreStats.TotalRankedScore, true);
+            embedBuilder.AddField(
+                "Total Score",
+                player.ScoreStats.TotalScore.ToString("#,#", numberFormatInfo),
+                true);
+
+            embedBuilder.AddField(
+                "Total Ranked Score",
+                player.ScoreStats.TotalRankedScore.ToString("#,#", numberFormatInfo),
+                true);
 
             embedBuilder.AddField(
                 "Avg Ranked Accuracy",
                 (Math.Round(player.ScoreStats.AverageRankedAccuracy * 100) / 100) + " %");
 
-            embedBuilder.AddField("Play Count", player.ScoreStats.TotalPlayCount, true);
-            embedBuilder.AddField("Ranked Play Count", player.ScoreStats.RankedPlayCount, true);
+            embedBuilder.AddField(
+                "Play Count",
+                player.ScoreStats.TotalPlayCount.ToString("#,#", numberFormatInfo),
+                true);
+
+            embedBuilder.AddField(
+                "Ranked Play Count",
+                player.ScoreStats.RankedPlayCount.ToString("#,#", numberFormatInfo),
+                true);
+
             embedBuilder.WithFooter($"API Calls Left: {api.RateLimitRemaining}");
 
             await this.Context.Channel.SendMessageAsync(string.Empty, false, embedBuilder.Build());
