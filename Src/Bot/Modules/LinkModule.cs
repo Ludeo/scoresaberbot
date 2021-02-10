@@ -23,14 +23,15 @@ namespace Bot.Bot.Modules
 
             string id = this.Context.Message.Author.Id.ToString();
 
-            bool exists = players.AppSettings.Settings.AllKeys!.Any(k => k == id);
+            KeyValueConfigurationCollection settings = players.AppSettings.Settings;
+            bool exists = settings.AllKeys!.Any(k => k == id);
 
             if (exists)
             {
-                players.AppSettings.Settings.Remove(id);
+                settings.Remove(id);
             }
 
-            players.AppSettings.Settings.Add(id, playerId.ToString());
+            settings.Add(id, playerId.ToString());
             players.Save();
 
             await this.Context.Channel.SendMessageAsync($"Successfully {(exists ? "updated" : "added")} your linked score saber id");
