@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Discord;
@@ -23,9 +24,10 @@ namespace Bot.Bot
         /// <param name="services"> The service provider of the services. </param>
         public CommandHandlingService(IServiceProvider services)
         {
+            CommandHandlingService.services = services;
+
             client = services!.GetRequiredService<DiscordSocketClient>();
             commands = services.GetRequiredService<CommandService>();
-            CommandHandlingService.services = services;
 
             commands.CommandExecuted += this.CommandExecutedAsync;
             client.MessageReceived += this.MessagedReceivedAsync;
@@ -34,56 +36,43 @@ namespace Bot.Bot
         /// <summary>
         ///     Initializes the CommandHandlingService.
         /// </summary>
-        /// <returns> Adds the services to the commands. </returns>
+        /// <returns> An empty task. </returns>
         public async Task InitializeAsync() => await commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
 
         private async Task MessagedReceivedAsync(SocketMessage rawMessage)
         {
-            if (!(rawMessage is SocketUserMessage message))
-            {
-                return;
-            }
-
-            if (message.Source != MessageSource.User)
-            {
-                return;
-            }
-
             int argPos = 0;
 
-            if (!message.HasStringPrefix(HelpFunctions.LoadConfig().AppSettings.Settings["prefix"].Value, ref argPos))
+            if (rawMessage is SocketUserMessage { Source: MessageSource.User } message &&
+                message.HasStringPrefix(HelpFunctions.LoadConfig().AppSettings.Settings["prefix"].Value, ref argPos))
             {
-                return;
+                SocketCommandContext context = new (client, message);
+
+                await commands.ExecuteAsync(context, argPos, services);
             }
-
-            SocketCommandContext context = new (client, message);
-
-            await commands.ExecuteAsync(context, argPos, services);
         }
 
         private async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
         {
+            string message = context.Message.ToString();
+
             if (!command.IsSpecified)
             {
-                LogMessage notSpecifiedLog = new (LogSeverity.Error, "Command", context.Message.ToString());
+                LogMessage notSpecifiedLog = new (LogSeverity.Error, "Command", message);
                 Console.WriteLine(notSpecifiedLog + " || Command doesn't exist");
-
-                return;
             }
-
-            if (result.IsSuccess)
+            else if (result.IsSuccess)
             {
-                LogMessage successLog = new (LogSeverity.Info, "Command", context.Message.ToString());
+                LogMessage successLog = new (LogSeverity.Info, "Command", message);
                 Console.WriteLine(successLog);
-
-                return;
             }
+            else
+            {
+                await context.Channel.SendMessageAsync($"error: {result}");
 
-            await context.Channel.SendMessageAsync($"error: {result}");
-
-            LogMessage errorLog = new (LogSeverity.Error, "Command", context.Message.ToString());
-
-            Console.WriteLine(errorLog + " || " + result);
+                LogMessage errorLog = new (LogSeverity.Error, "Command", message);
+                Console.WriteLine(errorLog + " || " + result);
+            }
         }
     }
 }
