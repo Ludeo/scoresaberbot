@@ -23,9 +23,9 @@ namespace Bot.Bot.Modules
         [Command("starttrack")]
         public async Task StartTrackAsync()
         {
-            Configuration config = HelpFunctions.LoadConfig();
+            Config config = Config.Default;
 
-            if (this.Context.Message.Author.Id.ToString() != config.AppSettings.Settings["adminid"].Value)
+            if (this.Context.Message.Author.Id != config.AdminId)
             {
                 return;
             }
@@ -147,10 +147,10 @@ namespace Bot.Bot.Modules
 
                     DiscordSocketClient client = Program.Client;
 
-                    Configuration config = HelpFunctions.LoadConfig();
+                    Config config = Config.Default;
 
-                    client.GetGuild(ulong.Parse(config.AppSettings.Settings["trackserver"].Value))
-                          .GetTextChannel(ulong.Parse(config.AppSettings.Settings["trackchannel"].Value))
+                    client.GetGuild(config.TrackServer)
+                          .GetTextChannel(config.TrackChannel)
                                                .SendMessageAsync(string.Empty, false, embedBuilder.Build());
                 }
             }

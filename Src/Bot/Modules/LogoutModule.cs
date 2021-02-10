@@ -17,15 +17,11 @@ namespace Bot.Bot.Modules
         [Command("logout")]
         public async Task LogoutAsync()
         {
-            Configuration config = HelpFunctions.LoadConfig();
-
-            if (this.Context.Message.Author.Id.ToString() != config.AppSettings.Settings["adminid"].Value)
+            if (this.Context.Message.Author.Id == Config.Default.AdminId)
             {
-                return;
+                await Program.Client.LogoutAsync();
+                Environment.Exit(0);
             }
-
-            await Program.Client.LogoutAsync();
-            Environment.Exit(0);
         }
     }
 }

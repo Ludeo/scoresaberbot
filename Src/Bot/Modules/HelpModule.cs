@@ -23,8 +23,8 @@ namespace Bot.Bot.Modules
                 Color = Color.Gold,
             };
 
-            Configuration config = HelpFunctions.LoadConfig();
-            string prefix = config.AppSettings.Settings["prefix"].Value;
+            Config config = Config.Default;
+            string prefix = config.Prefix;
 
             embedBuilder.AddField(
                 prefix + " credits",
@@ -80,8 +80,8 @@ namespace Bot.Bot.Modules
                 Color = Color.Gold,
             };
 
-            Configuration config = HelpFunctions.LoadConfig();
-            string prefix = config.AppSettings.Settings["prefix"].Value;
+            Config config = Config.Default;
+            string prefix = config.Prefix;
 
             switch (command)
             {

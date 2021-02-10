@@ -17,9 +17,9 @@ namespace Bot.Bot.Modules
         [Command("stoptrack")]
         public async Task StopTrackAsync()
         {
-            Configuration config = HelpFunctions.LoadConfig();
+            Config config = Config.Default;
 
-            if (this.Context.Message.Author.Id.ToString() != config.AppSettings.Settings["adminid"].Value)
+            if (this.Context.Message.Author.Id != config.AdminId)
             {
                 return;
             }

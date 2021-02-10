@@ -18,9 +18,9 @@ namespace Bot.Bot.Modules
         [Command("deletetrack")]
         public async Task DeleteTrackAsync(long playerId)
         {
-            Configuration config = HelpFunctions.LoadConfig();
+            Config config = Config.Default;
 
-            if (this.Context.Message.Author.Id != ulong.Parse(config.AppSettings.Settings["adminid"].Value!))
+            if (this.Context.Message.Author.Id != config.AdminId)
             {
                 return;
             }

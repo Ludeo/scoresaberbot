@@ -52,22 +52,22 @@ namespace Bot
             Client.Log += Log;
             services!.GetRequiredService<CommandService>().Log += Log;
 
-            Configuration config = HelpFunctions.LoadConfig();
+            Config config = Config.Default;
 
-            if (string.IsNullOrEmpty(config.AppSettings.Settings["token"].Value))
+            if (string.IsNullOrEmpty(config.Token))
             {
                 Console.WriteLine("The bot token is not available in the config.xml file. Add it and restart the bot.");
                 Environment.Exit(0);
             }
 
-            string token = config.AppSettings.Settings["token"].Value;
+            string token = config.Token;
 
             await Client.LoginAsync(TokenType.Bot, token);
             await Client.StartAsync();
 
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
 
-            string prefix = config.AppSettings.Settings["prefix"].Value;
+            string prefix = config.Prefix;
 
             await Client.SetGameAsync($"Beat Saber || {prefix}help");
 

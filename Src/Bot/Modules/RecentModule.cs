@@ -137,7 +137,7 @@ namespace Bot.Bot.Modules
             }
             else
             {
-                string prefix = HelpFunctions.LoadConfig().AppSettings.Settings["prefix"].Value;
+                string prefix = Config.Default.Prefix;
                 await this.Context.Channel.SendMessageAsync(
                     $"You don't have your score saber account linked to your discord profile. " +
                     $"Use \"{prefix}help link\" for more information or use \"{prefix}recent [scoresaberid]\" instead");
