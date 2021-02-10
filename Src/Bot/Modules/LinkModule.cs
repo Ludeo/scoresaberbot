@@ -41,12 +41,16 @@ namespace Bot.Bot.Modules
         [Command("link")]
         public async Task LinkAsync(string link)
         {
-            Uri uri = new (link!);
+            Uri uri = new (link);
             string idSegment = uri.Segments[2];
 
-            if (!long.TryParse(idSegment, out long playerId))
+            if (uri.Host != "new.scoresaber.com" || uri.Host != "scoresaber.com")
             {
-                await this.Context.Channel.SendMessageAsync($"Incorrect link, please use the scoresaber id or link.");
+                await this.Context.Channel.SendMessageAsync("Please only post links to the scoresaber website.");
+            }
+            else if (!long.TryParse(idSegment, out long playerId))
+            {
+                await this.Context.Channel.SendMessageAsync("Incorrect link, please make sure you are posting the correct link.");
             }
             else
             {
