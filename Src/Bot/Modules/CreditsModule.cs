@@ -12,7 +12,7 @@ namespace Bot.Bot.Modules
         /// <summary>
         ///     Function that gets executed when someone uses the credits command.
         /// </summary>
-        /// <returns> . </returns>
+        /// <returns> An empty task. </returns>
         [Command("credits")]
         public async Task CreditsAsync()
         {

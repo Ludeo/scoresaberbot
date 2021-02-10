@@ -32,24 +32,24 @@ Starts the tracking system
 Stops the tracking system
 ## Everyone
 ### credits
-![](https://i.imgur.com/aNnpCoZ.png)
-![](https://i.imgur.com/7I4Dtpi.png)
+![](https://i.imgur.com/geb3pel.png)
+![](https://i.imgur.com/tn2iscN.png)
 ### help
-![](https://i.imgur.com/LBChmpO.png)
+![](https://i.imgur.com/fNV4T1n.png)
 ### leaderboard
-![](https://i.imgur.com/jlCuMkU.png)
-![](https://i.imgur.com/BFsNaTV.png)
+![](https://i.imgur.com/9uM3AjZ.png)
+![](https://i.imgur.com/b8QkEEA.png)
 ### link
-![](https://i.imgur.com/pqpu2v9.png)
+![](https://i.imgur.com/9upt2qx.png)
 ### profile
-![](https://i.imgur.com/Yny5z8g.png)
-![](https://i.imgur.com/3PaaZWk.png)
+![](https://i.imgur.com/C8CdGyj.png)
+![](https://i.imgur.com/lzGMLNg.png)
 ### recent
-![](https://i.imgur.com/Ajh7A3E.png)
-![](https://i.imgur.com/6IPrypn.png)
+![](https://i.imgur.com/L980TyH.png)
+![](https://i.imgur.com/hUwpMvw.png)
 ### top5
-![](https://i.imgur.com/izgK2qQ.png)
-![](https://i.imgur.com/3m4oyjK.png)
+![](https://i.imgur.com/9kl6iJ6.png)
+![](https://i.imgur.com/L7EQU7V.png)
 ### top
-![](https://i.imgur.com/fPhjn8X.png)
-![](https://i.imgur.com/k8GTPTU.png)
+![](https://i.imgur.com/IKPnf0e.png)
+![](https://i.imgur.com/jgWMA64.png)

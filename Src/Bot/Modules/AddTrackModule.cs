@@ -16,7 +16,7 @@ namespace Bot.Bot.Modules
         ///     Function that gets executed when the admin uses the addtrack command.
         /// </summary>
         /// <param name="playerId"> The score saber id of the player that should get added to tracking. </param>
-        /// <returns> . </returns>
+        /// <returns> An empty task. </returns>
         [Command("addtrack")]
         public async Task AddTrackAsync(long playerId)
         {

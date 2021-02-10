@@ -41,7 +41,7 @@ namespace Bot.Bot.Modules
         [Command("link")]
         public async Task LinkAsync(string link)
         {
-            Uri uri = new (link);
+            Uri uri = new (link!);
             string idSegment = uri.Segments[2];
 
             if (!long.TryParse(idSegment, out long playerId))

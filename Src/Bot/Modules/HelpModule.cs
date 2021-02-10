@@ -13,7 +13,7 @@ namespace Bot.Bot.Modules
         /// <summary>
         ///     Function that gets executed when someone uses the help command.
         /// </summary>
-        /// <returns> . </returns>
+        /// <returns> An empty task. </returns>
         [Command("help")]
         public async Task HelpAllAsync()
         {
@@ -48,8 +48,8 @@ namespace Bot.Bot.Modules
 
             embedBuilder.AddField(
                 prefix + "recent | " + prefix + " recent [scoresaberid]",
-                "Returns the recent play of your linked account or returns the recent play of the given" +
-                "score saber account",
+                "Returns the most recent play of your linked account or returns the most recent play of the " +
+                "given score saber account",
                 true);
 
             embedBuilder.AddField(
@@ -59,8 +59,8 @@ namespace Bot.Bot.Modules
 
             embedBuilder.AddField(
                 prefix + "top | " + prefix + "top [scoresaberid]",
-                "Returns the top play of your linked account or returns the recent top play of the given" +
-                "score saber account",
+                "Returns the top play of your linked account or returns the top play of the given score saber " +
+                "account",
                 true);
 
             await this.Context.Channel.SendMessageAsync(string.Empty, false, embedBuilder.Build());
@@ -70,7 +70,7 @@ namespace Bot.Bot.Modules
         ///     Function that gets executed when someone uses the help command with a specified command.
         /// </summary>
         /// <param name="command"> The command you want help for. </param>
-        /// <returns> . </returns>
+        /// <returns> An empty task. </returns>
         [Command("help")]
         public async Task HelpSpecificAsync(string command)
         {
@@ -109,7 +109,7 @@ namespace Bot.Bot.Modules
                     break;
                 case "top5":
                     embedBuilder.Description =
-                        "With \"" + prefix + "top5\" you can view the profile of the top 5 ranked score saber players.";
+                        "With \"" + prefix + "top5\" you can view the profiles of the top 5 ranked score saber players.";
 
                     break;
                 case "top":

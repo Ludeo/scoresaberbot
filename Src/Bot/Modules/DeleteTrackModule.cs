@@ -14,7 +14,7 @@ namespace Bot.Bot.Modules
         ///     Function that gets executed if the admin runs the deletetrack command.
         /// </summary>
         /// <param name="playerId"> Score saber id of the player that should get removed from tracking. </param>
-        /// <returns> . </returns>
+        /// <returns> An empty task. </returns>
         [Command("deletetrack")]
         public async Task DeleteTrackAsync(long playerId)
         {

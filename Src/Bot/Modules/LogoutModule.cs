@@ -13,7 +13,7 @@ namespace Bot.Bot.Modules
         /// <summary>
         ///     Function that gets executed when the admin uses the logout command.
         /// </summary>
-        /// <returns> . </returns>
+        /// <returns> An empty task. </returns>
         [Command("logout")]
         public async Task LogoutAsync()
         {

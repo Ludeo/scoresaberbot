@@ -19,7 +19,7 @@ namespace Bot.Bot.Modules
         /// <summary>
         ///     Function that gets executed when someone uses the leaderboard command.
         /// </summary>
-        /// <returns> . </returns>
+        /// <returns> An empty task. </returns>
         [Command("leaderboard")]
         public async Task LeaderboardAsync()
         {

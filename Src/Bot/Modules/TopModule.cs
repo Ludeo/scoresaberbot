@@ -18,7 +18,7 @@ namespace Bot.Bot.Modules
         ///     Function that gets executed when someone uses the top command with a specified score saber id.
         /// </summary>
         /// <param name="playerId"> Score saber id of the player. </param>
-        /// <returns> . </returns>
+        /// <returns> An empty task. </returns>
         [Command("top")]
         public async Task TopAsync(long playerId)
         {
@@ -71,7 +71,7 @@ namespace Bot.Bot.Modules
             embedBuilder.AddField("Artist", score.SongAuthorName, true);
             embedBuilder.AddField("Mapper", score.LevelAuthorName, true);
 
-            NumberFormatInfo numberFormatInfo = new () { NumberGroupSeparator = " " };
+            NumberFormatInfo numberFormatInfo = new () { NumberGroupSeparator = "," };
 
             embedBuilder.AddField("PP", score.Pp.ToString("#,#.##", numberFormatInfo), true);
 
@@ -121,7 +121,7 @@ namespace Bot.Bot.Modules
         /// <summary>
         ///     Function that gets executed when someone uses the top command without a specified id.
         /// </summary>
-        /// <returns> . </returns>
+        /// <returns> An empty task. </returns>
         [Command("top")]
         public async Task MeTopAsync()
         {
@@ -140,7 +140,7 @@ namespace Bot.Bot.Modules
                 string prefix = HelpFunctions.LoadConfig().AppSettings.Settings["prefix"].Value;
                 await this.Context.Channel.SendMessageAsync(
                     $"You don't have your score saber account linked to your discord profile. " +
-                    $"Use \"{prefix}help link\"for more information");
+                    $"Use \"{prefix}help link\" for more information or use \"{prefix}top [scoresaberid]\" instead");
             }
         }
     }

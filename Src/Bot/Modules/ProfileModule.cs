@@ -18,7 +18,7 @@ namespace Bot.Bot.Modules
         ///     Function that will get executed when someone uses the profile command with a playerId specified.
         /// </summary>
         /// <param name="playerId"> The score saber id of the player that should be displayed. </param>
-        /// <returns> . </returns>
+        /// <returns> An empty task. </returns>
         [Command("profile")]
         public async Task ProfileAsync(long playerId)
         {
@@ -61,7 +61,7 @@ namespace Bot.Bot.Modules
 
             playerRanks.Save();
 
-            NumberFormatInfo numberFormatInfo = new () { NumberGroupSeparator = " " };
+            NumberFormatInfo numberFormatInfo = new () { NumberGroupSeparator = "," };
 
             int weeklyChange = int.Parse(player.PlayerInfo.RankHistory.Split(",")[^7]) - player.PlayerInfo.Rank;
             string weeklyChangeText = "```diff\n- " + -weeklyChange + "```";
@@ -141,7 +141,7 @@ namespace Bot.Bot.Modules
         /// <summary>
         ///     Function that gets executed when someone uses the profile command without a player id specified.
         /// </summary>
-        /// <returns> . </returns>
+        /// <returns> An empty task. </returns>
         [Command("profile")]
         public async Task MeProfileAsync()
         {
@@ -159,8 +159,8 @@ namespace Bot.Bot.Modules
             {
                 string prefix = HelpFunctions.LoadConfig().AppSettings.Settings["prefix"].Value;
                 await this.Context.Channel.SendMessageAsync(
-                    $"You don't have your score saber account linked to your discord profile. " +
-                    $"Use \"{prefix}help link\"for more information");
+                    $"You don't have your score saber account linked to your discord profile. Use " +
+                    $"\"{prefix}help link\" for more information or use \"{prefix}profile [scoresaberid]\" instead");
             }
         }
     }

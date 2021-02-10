@@ -14,7 +14,7 @@ namespace Bot.Bot.Modules
         /// <summary>
         ///     Function that gets executed when someone uses the top5 command.
         /// </summary>
-        /// <returns> . </returns>
+        /// <returns> An empty task. </returns>
         [Command("top5")]
         public async Task Top5Async()
         {
@@ -37,7 +37,7 @@ namespace Bot.Bot.Modules
 
                 embedBuilder.AddField("Rank", player.Rank, true);
 
-                NumberFormatInfo numberFormatInfo = new () { NumberGroupSeparator = " " };
+                NumberFormatInfo numberFormatInfo = new () { NumberGroupSeparator = "," };
 
                 embedBuilder.AddField("PP", player.Pp.ToString("#,#.##", numberFormatInfo), true);
                 embedBuilder.AddField("Country", $":flag_{player.Country.ToLower()}:", true);
