@@ -48,8 +48,10 @@ namespace Bot.Bot.Modules
             {
                 await this.Context.Channel.SendMessageAsync($"Incorrect link, please use the scoresaber id or link.");
             }
-
-            await this.LinkAsync(playerId);
+            else
+            {
+                await this.LinkAsync(playerId);
+            }
         }
     }
 }
