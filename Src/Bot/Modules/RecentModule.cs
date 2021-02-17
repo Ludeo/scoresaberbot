@@ -84,9 +84,11 @@ namespace Bot.Bot.Modules
 
             embedBuilder.AddField("PP", score.Pp.ToString("#,#.##", numberFormatInfo), true);
 
+            double weightedPp = Math.Round(score.Pp * score.Weight * 100) / 100;
+
             embedBuilder.AddField(
                 "Weighted PP",
-                (Math.Round(score.Pp * score.Weight * 100) / 100).ToString("#,#.##", numberFormatInfo),
+                weightedPp == 0 ? "0" : (Math.Round(score.Pp * score.Weight * 100) / 100).ToString("#,#.##", numberFormatInfo),
                 true);
 
             embedBuilder.AddField("Accuracy", (Math.Round((double)score.Score / score.MaxScore * 10000) / 100) + " %", true);

@@ -9,7 +9,7 @@ All the information that I got about the API is from [ppotatoo's](https://github
 # Selfhosting Instructions
 Download the newest release and run the bot. The bot should have instantly closed and created a config.json file now. Fill out all of the parameters and run the bot again (If you don't fill out everything, the bot might not work correctly). Now everything should work and the bot will create missing json files, when he needs them. For the possible config parameters, go to [here](#config-parameters).
 
-If you plan to use the leaderboard command, make sure you activate the presence intent and server members intent in the bot settings on the discord website. ![]()
+If you plan to use the leaderboard command, make sure you activate the presence intent and server members intent in the bot settings on the discord website. ![](https://i.imgur.com/NaJyD3a.png)
 
 
 # Config parameters
@@ -48,7 +48,7 @@ Stops the tracking system
 ![](https://i.imgur.com/lzGMLNg.png)
 ### recent
 ![](https://i.imgur.com/L980TyH.png)
-![](https://i.imgur.com/hUwpMvw.png)
+![](https://i.imgur.com/M31npoI.png)
 ### top5
 ![](https://i.imgur.com/9kl6iJ6.png)
 ![](https://i.imgur.com/L7EQU7V.png)
