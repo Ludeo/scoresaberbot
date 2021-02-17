@@ -47,16 +47,14 @@ namespace Bot.Bot.Modules
             {
                 Player player = await api.GetPlayerAsync(playerId);
 
-                playerInformation.Add(
-                    new PlayerInformation
-                    {
-                        Id = playerId,
-                        Name = player.PlayerInfo.PlayerName,
-                        Rank = player.PlayerInfo.Rank,
-                    });
+                playerInformation.Add(new PlayerInformation
+                {
+                    Id = playerId,
+                    Name = player.PlayerInfo.PlayerName,
+                    Rank = player.PlayerInfo.Rank,
+                });
 
-                await File.WriteAllTextAsync(
-                    "playerinformation.json", JsonSerializer.Serialize(playerInformation));
+                await File.WriteAllTextAsync("playerinformation.json", JsonSerializer.Serialize(playerInformation));
             }
 
             DateTime timeNow = DateTime.Now;
@@ -67,8 +65,7 @@ namespace Bot.Bot.Modules
 
             await File.WriteAllTextAsync("trackedplayers.json", JsonSerializer.Serialize(trackedPlayers));
 
-            await this.Context.Channel.SendMessageAsync(
-                "The player with the id " + playerId + " is now getting tracked");
+            await this.Context.Channel.SendMessageAsync("The player with the id " + playerId + " is now getting tracked");
         }
     }
 }

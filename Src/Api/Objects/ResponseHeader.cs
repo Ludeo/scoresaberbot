@@ -13,9 +13,7 @@ namespace Bot.Api.Objects
         /// <param name="header"> The header of the response from the api call. </param>
         public ResponseHeader(string header)
         {
-            foreach (string line in header.Split(
-                new[] { Environment.NewLine },
-                StringSplitOptions.RemoveEmptyEntries))
+            foreach (string line in header.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
             {
                 if (line.StartsWith("X-RateLimit-Limit"))
                 {

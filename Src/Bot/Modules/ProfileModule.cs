@@ -31,12 +31,10 @@ namespace Bot.Bot.Modules
 
             List<PlayerInformation> playerInformationList = PlayerInformation.FromJson();
 
-            if (playerInformationList!.Any(
-                playerInfo => playerInfo.Id == long.Parse(player.PlayerInfo.PlayerId!)))
+            if (playerInformationList!.Any(playerInfo => playerInfo.Id == long.Parse(player.PlayerInfo.PlayerId!)))
             {
                 PlayerInformation playerInformation =
-                    playerInformationList.Find(
-                        playerInfo => playerInfo.Id == long.Parse(player.PlayerInfo.PlayerId!));
+                    playerInformationList.Find(playerInfo => playerInfo.Id == long.Parse(player.PlayerInfo.PlayerId!));
 
                 playerInformation.Name = player.PlayerInfo.PlayerName;
                 playerInformation.Rank = player.PlayerInfo.Rank;
@@ -51,8 +49,7 @@ namespace Bot.Bot.Modules
                 });
             }
 
-            await File.WriteAllTextAsync(
-                "playerinformation.json", JsonSerializer.Serialize(playerInformationList));
+            await File.WriteAllTextAsync("playerinformation.json", JsonSerializer.Serialize(playerInformationList));
 
             NumberFormatInfo numberFormatInfo = new () { NumberGroupSeparator = "," };
 
@@ -73,20 +70,14 @@ namespace Bot.Bot.Modules
             };
 
             embedBuilder.AddField("Player Stats", "\u200B");
-            embedBuilder.AddField(
-                "Global Rank",
-                player.PlayerInfo.Rank.ToString("#,#", numberFormatInfo),
-                true);
+            embedBuilder.AddField("Global Rank", player.PlayerInfo.Rank.ToString("#,#", numberFormatInfo), true);
 
             embedBuilder.AddField(
                 ":flag_" + player.PlayerInfo.Country.ToLower() + ": Rank",
                 player.PlayerInfo.CountryRank.ToString("#,#", numberFormatInfo),
                 true);
 
-            embedBuilder.AddField(
-                "PP",
-                player.PlayerInfo.Pp.ToString("#,#.##", numberFormatInfo),
-                true);
+            embedBuilder.AddField("PP", player.PlayerInfo.Pp.ToString("#,#.##", numberFormatInfo), true);
 
             if (!string.IsNullOrEmpty(player.PlayerInfo.Role))
             {
@@ -96,35 +87,18 @@ namespace Bot.Bot.Modules
             embedBuilder.AddField("Weekly Change", weeklyChangeText, true);
             embedBuilder.AddField("Active Status", player.PlayerInfo.ActiveStatus, true);
             embedBuilder.AddField("Banned Status", player.PlayerInfo.BanStatus, true);
-
-            embedBuilder.AddField(
-                "------------------------------------------------------------------",
-                "\u200B");
-
+            embedBuilder.AddField("------------------------------------------------------------------", "\u200B");
             embedBuilder.AddField("Score Information", "\u200B");
-            embedBuilder.AddField(
-                "Total Score",
-                player.ScoreStats.TotalScore.ToString("#,#", numberFormatInfo),
-                true);
+            embedBuilder.AddField("Total Score", player.ScoreStats.TotalScore.ToString("#,#", numberFormatInfo), true);
 
             embedBuilder.AddField(
                 "Total Ranked Score",
                 player.ScoreStats.TotalRankedScore.ToString("#,#", numberFormatInfo),
                 true);
 
-            embedBuilder.AddField(
-                "Avg Ranked Accuracy",
-                (Math.Round(player.ScoreStats.AverageRankedAccuracy * 100) / 100) + " %");
-
-            embedBuilder.AddField(
-                "Play Count",
-                player.ScoreStats.TotalPlayCount.ToString("#,#", numberFormatInfo),
-                true);
-
-            embedBuilder.AddField(
-                "Ranked Play Count",
-                player.ScoreStats.RankedPlayCount.ToString("#,#", numberFormatInfo),
-                true);
+            embedBuilder.AddField("Avg Ranked Accuracy", (Math.Round(player.ScoreStats.AverageRankedAccuracy * 100) / 100) + " %");
+            embedBuilder.AddField("Play Count", player.ScoreStats.TotalPlayCount.ToString("#,#", numberFormatInfo), true);
+            embedBuilder.AddField("Ranked Play Count", player.ScoreStats.RankedPlayCount.ToString("#,#", numberFormatInfo), true);
 
             embedBuilder.WithFooter($"API Calls Left: {api.RateLimitRemaining}");
 
@@ -140,13 +114,11 @@ namespace Bot.Bot.Modules
         {
             List<LinkedPlayer> linkedPlayers = LinkedPlayer.FromJson();
 
-            bool exists = linkedPlayers!
-                .Any(player => player.DiscordId == this.Context.Message.Author.Id);
+            bool exists = linkedPlayers!.Any(player => player.DiscordId == this.Context.Message.Author.Id);
 
             if (exists)
             {
-                long id = linkedPlayers.Find(player => player.DiscordId == this.Context.Message.Author.Id)
-                                        .ScoreSaberId;
+                long id = linkedPlayers.Find(player => player.DiscordId == this.Context.Message.Author.Id).ScoreSaberId;
 
                 await this.ProfileAsync(id);
             }
@@ -155,8 +127,8 @@ namespace Bot.Bot.Modules
                 string prefix = Config.Default.Prefix;
 
                 await this.Context.Channel.SendMessageAsync(
-                    $"You don't have your score saber account linked to your discord profile. Use " +
-                    $"\"{prefix}help link\" for more information or use \"{prefix}profile [scoresaberid]\" instead");
+                    $"You don't have your score saber account linked to your discord profile. Use \"{prefix}help link\" for more information " +
+                    $"or use \"{prefix}profile [scoresaberid]\" instead");
             }
         }
     }

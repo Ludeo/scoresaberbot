@@ -9,6 +9,8 @@ All the information that I got about the API is from [ppotatoo's](https://github
 # Selfhosting Instructions
 Download the newest release and run the bot. The bot should have instantly closed and created a config.json file now. Fill out all of the parameters and run the bot again (If you don't fill out everything, the bot might not work correctly). Now everything should work and the bot will create missing json files, when he needs them. For the possible config parameters, go to [here](#config-parameters).
 
+If you plan to use the leaderboard command, make sure you activate the presence intent and server members intent in the bot settings on the discord website. ![]()
+
 
 # Config parameters
     "token": Discord bot token, should be self explanitory

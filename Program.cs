@@ -74,11 +74,10 @@ namespace Bot
             await Task.Delay(Timeout.Infinite);
         }
 
-        private ServiceProvider ConfigureServices()
-            => new ServiceCollection()
-               .AddSingleton<DiscordSocketClient>()
-               .AddSingleton<CommandService>()
-               .AddSingleton<CommandHandlingService>()
-               .BuildServiceProvider();
+        private ServiceProvider ConfigureServices() => new ServiceCollection()
+                                                       .AddSingleton<DiscordSocketClient>()
+                                                       .AddSingleton<CommandService>()
+                                                       .AddSingleton<CommandHandlingService>()
+                                                       .BuildServiceProvider();
     }
 }

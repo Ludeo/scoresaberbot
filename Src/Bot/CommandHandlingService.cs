@@ -43,8 +43,7 @@ namespace Bot.Bot
         {
             int argPos = 0;
 
-            if (rawMessage is SocketUserMessage { Source: MessageSource.User } message &&
-                message.HasStringPrefix(Config.Default.Prefix, ref argPos))
+            if (rawMessage is SocketUserMessage { Source: MessageSource.User } message && message.HasStringPrefix(Config.Default.Prefix, ref argPos))
             {
                 SocketCommandContext context = new (client, message);
 

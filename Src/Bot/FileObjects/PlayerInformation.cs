@@ -41,8 +41,7 @@ namespace Bot.Bot.FileObjects
                 File.WriteAllText("playerinformation.json", JsonSerializer.Serialize(playerInformation));
             }
 
-            return JsonSerializer.Deserialize<List<PlayerInformation>>(
-                File.ReadAllText("playerinformation.json"));
+            return JsonSerializer.Deserialize<List<PlayerInformation>>(File.ReadAllText("playerinformation.json"));
         }
     }
 }

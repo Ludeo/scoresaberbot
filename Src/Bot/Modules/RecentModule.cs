@@ -58,8 +58,7 @@ namespace Bot.Bot.Modules
                     Rank = player.PlayerInfo.Rank,
                 });
 
-                await File.WriteAllTextAsync(
-                    "playerinformation.json", JsonSerializer.Serialize(playerInformationList));
+                await File.WriteAllTextAsync("playerinformation.json", JsonSerializer.Serialize(playerInformationList));
             }
 
             EmbedBuilder embedBuilder = new ()
@@ -90,17 +89,12 @@ namespace Bot.Bot.Modules
                 (Math.Round(score.Pp * score.Weight * 100) / 100).ToString("#,#.##", numberFormatInfo),
                 true);
 
-            embedBuilder.AddField(
-                "Accuracy",
-                (Math.Round((double)score.Score / score.MaxScore * 10000) / 100) + " %",
-                true);
-
+            embedBuilder.AddField("Accuracy", (Math.Round((double)score.Score / score.MaxScore * 10000) / 100) + " %", true);
             embedBuilder.AddField("Difficulty", score.DifficultyRaw, true);
 
             embedBuilder.AddField(
                 "Map Rank",
-                $"[{score.Rank.ToString("#,#", numberFormatInfo)}](https://scoresaber.com/leaderboard/" +
-                $"{score.LeaderboardId})",
+                $"[{score.Rank.ToString("#,#", numberFormatInfo)}](https://scoresaber.com/leaderboard/{score.LeaderboardId})",
                 true);
 
             string mods = score.Mods;
@@ -114,14 +108,10 @@ namespace Bot.Bot.Modules
 
             embedBuilder.AddField(
                 "Score",
-                score.Score.ToString("#,#", numberFormatInfo) + " / " + 
-                score.MaxScore.ToString("#,#", numberFormatInfo),
+                score.Score.ToString("#,#", numberFormatInfo) + " / " + score.MaxScore.ToString("#,#", numberFormatInfo),
                 true);
 
-            embedBuilder.AddField(
-                "Unmodified Score",
-                score.UnmodifiedScore.ToString("#,#", numberFormatInfo),
-                true);
+            embedBuilder.AddField("Unmodified Score", score.UnmodifiedScore.ToString("#,#", numberFormatInfo), true);
 
             embedBuilder.WithFooter("API Calls Left: " + api.RateLimitRemaining);
 
@@ -137,22 +127,21 @@ namespace Bot.Bot.Modules
         {
             List<LinkedPlayer> linkedPlayers = LinkedPlayer.FromJson();
 
-            bool exists = linkedPlayers!
-                .Any(player => player.DiscordId == this.Context.Message.Author.Id);
+            bool exists = linkedPlayers!.Any(player => player.DiscordId == this.Context.Message.Author.Id);
 
             if (exists)
             {
-                long id = linkedPlayers.Find(player => player.DiscordId == this.Context.Message.Author.Id)
-                                       .ScoreSaberId;
+                long id = linkedPlayers.Find(player => player.DiscordId == this.Context.Message.Author.Id).ScoreSaberId;
 
                 await this.RecentAsync(id);
             }
             else
             {
                 string prefix = Config.Default.Prefix;
+
                 await this.Context.Channel.SendMessageAsync(
-                    $"You don't have your score saber account linked to your discord profile. " +
-                    $"Use \"{prefix}help link\" for more information or use \"{prefix}recent [scoresaberid]\" instead");
+                    $"You don't have your score saber account linked to your discord profile. Use \"{prefix}help link\" for more information " +
+                    $"or use \"{prefix}recent [scoresaberid]\" instead");
             }
         }
     }

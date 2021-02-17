@@ -37,10 +37,7 @@ namespace Bot.Api.Objects
                 return null;
             }
 
-            HttpResponseMessage response = this.httpClient
-                                               .GetAsync(
-                                                   $"{BaseUrl}player/{playerId}/full")
-                                               .Result;
+            HttpResponseMessage response = this.httpClient.GetAsync($"{BaseUrl}player/{playerId}/full").Result;
 
             string responseString = await response.Content.ReadAsStringAsync();
 
@@ -66,10 +63,7 @@ namespace Bot.Api.Objects
                 return null;
             }
 
-            HttpResponseMessage response = this.httpClient
-                                               .GetAsync(
-                                                   $"{BaseUrl}player/{playerId}/scores/top/{pageNumber}")
-                                               .Result;
+            HttpResponseMessage response = this.httpClient.GetAsync($"{BaseUrl}player/{playerId}/scores/top/{pageNumber}").Result;
 
             string responseString = await response.Content.ReadAsStringAsync();
 
@@ -108,10 +102,7 @@ namespace Bot.Api.Objects
                 return null;
             }
 
-            HttpResponseMessage response = this.httpClient
-                                               .GetAsync(
-                                                   $"{BaseUrl}player/{playerId}/scores/recent/{pageNumber}")
-                                               .Result;
+            HttpResponseMessage response = this.httpClient.GetAsync($"{BaseUrl}player/{playerId}/scores/recent/{pageNumber}").Result;
 
             string responseString = await response.Content.ReadAsStringAsync();
 
@@ -149,10 +140,7 @@ namespace Bot.Api.Objects
                 return null;
             }
 
-            HttpResponseMessage response = this.httpClient
-                                               .GetAsync(
-                                                   $"{BaseUrl}players/by-name/{searchInput}")
-                                               .Result;
+            HttpResponseMessage response = this.httpClient.GetAsync($"{BaseUrl}players/by-name/{searchInput}").Result;
 
             string responseString = await response.Content.ReadAsStringAsync();
 
@@ -177,10 +165,7 @@ namespace Bot.Api.Objects
                 return null;
             }
 
-            HttpResponseMessage response = this.httpClient
-                                               .GetAsync(
-                                                   $"{BaseUrl}players/{leaderboardPage}")
-                                               .Result;
+            HttpResponseMessage response = this.httpClient.GetAsync($"{BaseUrl}players/{leaderboardPage}").Result;
 
             string responseString = await response.Content.ReadAsStringAsync();
 
@@ -204,10 +189,7 @@ namespace Bot.Api.Objects
                 return null;
             }
 
-            HttpResponseMessage response = this.httpClient
-                                               .GetAsync(
-                                                   $"{BaseUrl}players/pages")
-                                               .Result;
+            HttpResponseMessage response = this.httpClient.GetAsync($"{BaseUrl}players/pages").Result;
 
             string responseString = await response.Content.ReadAsStringAsync();
 

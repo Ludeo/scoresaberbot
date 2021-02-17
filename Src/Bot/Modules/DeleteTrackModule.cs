@@ -34,8 +34,7 @@ namespace Bot.Bot.Modules
             {
                 trackedPlayers.Remove(trackedPlayers.Find(player => player.Id == playerId));
 
-                await File.WriteAllTextAsync(
-                    "trackedplayers.json", JsonSerializer.Serialize(trackedPlayers));
+                await File.WriteAllTextAsync("trackedplayers.json", JsonSerializer.Serialize(trackedPlayers));
 
                 await this.Context.Channel.SendMessageAsync("Player was removed from tracking.");
 

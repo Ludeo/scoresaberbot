@@ -33,8 +33,7 @@ namespace Bot.Bot.Modules
 
             Api.Objects.Api api = Program.GetApi();
 
-            foreach (LinkedPlayer linkedPlayer in linkedPlayers!
-                .Where(linkedPlayer => this.Context.Guild.GetUser(linkedPlayer.DiscordId) != null))
+            foreach (LinkedPlayer linkedPlayer in linkedPlayers!.Where(linkedPlayer => this.Context.Guild.GetUser(linkedPlayer.DiscordId) != null))
             {
                 if (playerInformations!.All(player => player.Id != linkedPlayer.ScoreSaberId))
                 {
@@ -48,8 +47,7 @@ namespace Bot.Bot.Modules
                     });
                 }
 
-                PlayerInformation playerInformation =
-                    playerInformations.Find(player => player.Id == linkedPlayer.ScoreSaberId);
+                PlayerInformation playerInformation = playerInformations.Find(player => player.Id == linkedPlayer.ScoreSaberId);
 
                 LeaderboardPlayer leaderboardPlayer = new ()
                 {
@@ -62,8 +60,7 @@ namespace Bot.Bot.Modules
                 leaderboardPlayers.Add(leaderboardPlayer);
             }
 
-            await File.WriteAllTextAsync(
-                "playerinformation.json", JsonSerializer.Serialize(playerInformations));
+            await File.WriteAllTextAsync("playerinformation.json", JsonSerializer.Serialize(playerInformations));
 
             leaderboardPlayers = leaderboardPlayers.OrderBy(x => x.Rank).ToList();
 
@@ -109,9 +106,9 @@ namespace Bot.Bot.Modules
                 sb.AppendLine("+-------------------------------------------------+---------+");
             }
 
-            int pos =
-                leaderboardPlayers.FindIndex(x => x.DiscordId == this.Context.Message.Author.Id);
+            int pos = leaderboardPlayers.FindIndex(x => x.DiscordId == this.Context.Message.Author.Id);
             string yourPosition = $"Your Position: {pos + 1}/{leaderboardPlayers.Count}";
+
             sb.AppendLine($"| {yourPosition,-47} | {leaderboardPlayers[pos].Rank,-8}|");
             sb.AppendLine("+-------------------------------------------------+---------+");
             sb.AppendLine("```");

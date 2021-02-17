@@ -37,15 +37,14 @@ namespace Bot.Bot.Modules
 
             await File.WriteAllTextAsync("linkedplayers.json", JsonSerializer.Serialize(linkedPlayers));
 
-            await this.Context.Channel.SendMessageAsync(
-                $"Successfully {(exists ? "updated" : "added")} your linked score saber id");
+            await this.Context.Channel.SendMessageAsync($"Successfully {(exists ? "updated" : "added")} your linked score saber id");
         }
 
         /// <inheritdoc cref="LinkAsync(long)"/>
         [Command("link")]
         public async Task LinkAsync(string link)
         {
-            Uri uri = new (link!);
+            Uri uri = new (link);
             string idSegment = uri.Segments[2];
 
             if (uri.Host != "new.scoresaber.com" || uri.Host != "scoresaber.com")
@@ -54,8 +53,7 @@ namespace Bot.Bot.Modules
             }
             else if (!long.TryParse(idSegment, out long playerId))
             {
-                await this.Context.Channel.SendMessageAsync(
-                    "Incorrect link, please make sure you are posting the correct link.");
+                await this.Context.Channel.SendMessageAsync("Incorrect link, please make sure you are posting the correct link.");
             }
             else
             {

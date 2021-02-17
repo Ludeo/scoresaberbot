@@ -75,8 +75,7 @@ namespace Bot.Bot.Modules
 
                     if (exists)
                     {
-                        playerName = playerInformationList
-                                     .Find(playerInformation => playerInformation.Id == playerId).Name;
+                        playerName = playerInformationList.Find(playerInformation => playerInformation.Id == playerId).Name;
                     }
                     else
                     {
@@ -118,17 +117,12 @@ namespace Bot.Bot.Modules
                         (Math.Round(score.Pp * score.Weight * 100) / 100).ToString("#,#.##", numberFormatInfo),
                         true);
 
-                    embedBuilder.AddField(
-                        "Accuracy",
-                        (Math.Round((double)score.Score / score.MaxScore * 10000) / 100) + " %",
-                        true);
-
+                    embedBuilder.AddField("Accuracy", (Math.Round((double)score.Score / score.MaxScore * 10000) / 100) + " %", true);
                     embedBuilder.AddField("Difficulty", score.DifficultyRaw, true);
 
                     embedBuilder.AddField(
                         "Map Rank",
-                        $"[{score.Rank.ToString("#,#", numberFormatInfo)}](https://scoresaber.com/" +
-                        $"leaderboard/{score.LeaderboardId})",
+                        $"[{score.Rank.ToString("#,#", numberFormatInfo)}](https://scoresaber.com/leaderboard/{score.LeaderboardId})",
                         true);
 
                     string mods = score.Mods;
@@ -142,14 +136,10 @@ namespace Bot.Bot.Modules
 
                     embedBuilder.AddField(
                         "Score",
-                        score.Score.ToString("#,#", numberFormatInfo) + " / " + 
-                        score.MaxScore.ToString("#,#", numberFormatInfo),
+                        score.Score.ToString("#,#", numberFormatInfo) + " / " + score.MaxScore.ToString("#,#", numberFormatInfo),
                         true);
 
-                    embedBuilder.AddField(
-                        "Unmodified Score",
-                        score.UnmodifiedScore.ToString("#,#", numberFormatInfo),
-                        true);
+                    embedBuilder.AddField("Unmodified Score", score.UnmodifiedScore.ToString("#,#", numberFormatInfo), true);
 
                     embedBuilder.WithFooter("API Calls Left: " + api.RateLimitRemaining);
 
@@ -157,8 +147,7 @@ namespace Bot.Bot.Modules
 
                     Config config = Config.Default;
 
-                    client.GetGuild(config.TrackServer)
-                          .GetTextChannel(config.TrackChannel)
+                    client.GetGuild(config.TrackServer).GetTextChannel(config.TrackChannel)
                                                .SendMessageAsync(string.Empty, false, embedBuilder.Build());
                 }
             }
