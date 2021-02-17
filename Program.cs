@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Bot.Bot;
@@ -36,7 +37,8 @@ namespace Bot
 
         private static Task Log(LogMessage log)
         {
-            Console.WriteLine(log.ToString());
+            Console.WriteLine(log);
+            File.AppendAllText("log.txt", log + "\n");
 
             return Task.CompletedTask;
         }
@@ -56,7 +58,9 @@ namespace Bot
 
             if (string.IsNullOrEmpty(config.Token))
             {
-                Console.WriteLine("The bot token is not available in the config.xml file. Add it and restart the bot.");
+                string log = "The bot token is not available in the config.json file. Add it and restart the bot.";
+                Console.WriteLine(log);
+                await File.AppendAllTextAsync("log.txt", log);
                 Environment.Exit(0);
             }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Bot.Bot.FileObjects;
@@ -59,11 +60,13 @@ namespace Bot.Bot
             {
                 LogMessage notSpecifiedLog = new (LogSeverity.Error, "Command", message);
                 Console.WriteLine(notSpecifiedLog + " || Command doesn't exist");
+                await File.AppendAllTextAsync("log.txt", notSpecifiedLog + " || Command doesn't exist\n");
             }
             else if (result.IsSuccess)
             {
                 LogMessage successLog = new (LogSeverity.Info, "Command", message);
                 Console.WriteLine(successLog);
+                await File.AppendAllTextAsync("log.txt", successLog + "\n");
             }
             else
             {
@@ -71,6 +74,7 @@ namespace Bot.Bot
 
                 LogMessage errorLog = new (LogSeverity.Error, "Command", message);
                 Console.WriteLine(errorLog + " || " + result);
+                await File.AppendAllTextAsync("log.txt", errorLog + " || " + result + "\n");
             }
         }
     }
