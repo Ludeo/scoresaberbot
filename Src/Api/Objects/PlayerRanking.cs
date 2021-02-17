@@ -8,7 +8,7 @@ namespace Bot.Api.Objects
     public class PlayerRanking
     {
         /// <summary>
-        ///     Gets or sets an array of players from the leaderboard page
+        ///     Gets or sets an array of players from the leaderboard page.
         /// </summary>
         [JsonPropertyName("players")]
         public SearchedPlayer[] Players { get; set; }

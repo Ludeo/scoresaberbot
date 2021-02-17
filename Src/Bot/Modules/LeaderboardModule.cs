@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Bot.Api.Objects;
+using Bot.Bot.FileObjects;
 using Bot.Bot.Objects;
 using Discord;
 using Discord.Commands;
@@ -23,51 +25,45 @@ namespace Bot.Bot.Modules
         [Command("leaderboard")]
         public async Task LeaderboardAsync()
         {
-            Configuration playerRanks = HelpFunctions.LoadPlayerRanks();
+            List<PlayerInformation> playerInformations = PlayerInformation.FromJson();
 
-            Configuration players = HelpFunctions.LoadPlayers();
+            List<LinkedPlayer> linkedPlayers = LinkedPlayer.FromJson();
 
             List<LeaderboardPlayer> leaderboardPlayers = new ();
 
-            foreach (string key in players.AppSettings.Settings.AllKeys)
-            {
-                if (this.Context.Guild.GetUser(ulong.Parse(key!)) != null)
-                {
-                    LeaderboardPlayer player = new (
-                        ulong.Parse(key!),
-                        long.Parse(players.AppSettings.Settings[key].Value!));
-
-                    leaderboardPlayers.Add(player);
-                }
-            }
-
             Api.Objects.Api api = Program.GetApi();
 
-            Configuration playerNames = HelpFunctions.LoadPlayerNames();
-
-            foreach (LeaderboardPlayer player in leaderboardPlayers)
+            foreach (LinkedPlayer linkedPlayer in linkedPlayers!
+                .Where(linkedPlayer => this.Context.Guild.GetUser(linkedPlayer.DiscordId) != null))
             {
-                if (playerRanks.AppSettings.Settings.AllKeys!.Any(key => key == player.ScoresaberId.ToString()))
+                if (playerInformations!.All(player => player.Id != linkedPlayer.ScoreSaberId))
                 {
-                    player.Rank = int.Parse(playerRanks.AppSettings.Settings[player.ScoresaberId.ToString()].Value!);
-                }
-                else
-                {
-                    Player newPlayer = await api.GetPlayerAsync(player.ScoresaberId);
-                    player.Rank = newPlayer.PlayerInfo.Rank;
-
-                    playerRanks.AppSettings.Settings.Add(player.ScoresaberId.ToString(), player.Rank.ToString());
-
-                    if (playerNames.AppSettings.Settings.AllKeys!.All(x => x != player.ScoresaberId.ToString()))
+                    Player player = await api.GetPlayerAsync(linkedPlayer.ScoreSaberId);
+                    PlayerInfo playerInfo = player.PlayerInfo;
+                    playerInformations.Add(new PlayerInformation
                     {
-                        playerNames.AppSettings.Settings
-                                   .Add(player.ScoresaberId.ToString(), newPlayer.PlayerInfo.PlayerName);
-                    }
+                        Id = linkedPlayer.ScoreSaberId,
+                        Name = playerInfo.PlayerName,
+                        Rank = playerInfo.Rank,
+                    });
                 }
+
+                PlayerInformation playerInformation =
+                    playerInformations.Find(player => player.Id == linkedPlayer.ScoreSaberId);
+
+                LeaderboardPlayer leaderboardPlayer = new ()
+                {
+                    DiscordId = linkedPlayer.DiscordId,
+                    ScoresaberId = linkedPlayer.ScoreSaberId,
+                    Name = playerInformation.Name,
+                    Rank = playerInformation.Rank,
+                };
+
+                leaderboardPlayers.Add(leaderboardPlayer);
             }
 
-            playerRanks.Save();
-            playerNames.Save();
+            await File.WriteAllTextAsync(
+                "playerinformation.json", JsonSerializer.Serialize(playerInformations));
 
             leaderboardPlayers = leaderboardPlayers.OrderBy(x => x.Rank).ToList();
 
@@ -89,7 +85,7 @@ namespace Bot.Bot.Modules
                 SocketGuildUser user = this.Context.Guild.GetUser(player.DiscordId);
                 string discordName = $"{user.Username}#{user.DiscriminatorValue}";
 
-                string scoreSaberName = $"({playerNames.AppSettings.Settings[player.ScoresaberId.ToString()].Value})";
+                string scoreSaberName = $"({player.Name})";
 
                 string fullName = $"{discordName} {scoreSaberName}";
 
@@ -128,6 +124,7 @@ namespace Bot.Bot.Modules
             };
 
             embedBuilder.WithFooter("API Calls Left: " + api.RateLimitRemaining);
+
             await this.Context.Channel.SendMessageAsync(string.Empty, false, embedBuilder.Build());
         }
     }

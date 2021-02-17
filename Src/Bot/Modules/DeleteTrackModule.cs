@@ -1,6 +1,9 @@
-﻿using System.Configuration;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Bot.Bot.FileObjects;
 using Discord.Commands;
 
 namespace Bot.Bot.Modules
@@ -25,12 +28,14 @@ namespace Bot.Bot.Modules
                 return;
             }
 
-            Configuration trackedPlayers = HelpFunctions.LoadTrackedPlayers();
+            List<TrackedPlayer> trackedPlayers = TrackedPlayer.FromJson();
 
-            if (trackedPlayers.AppSettings.Settings.AllKeys!.Any(id => id == playerId.ToString()))
+            if (trackedPlayers!.Any(player => player.Id == playerId))
             {
-                trackedPlayers.AppSettings.Settings.Remove(playerId.ToString());
-                trackedPlayers.Save();
+                trackedPlayers.Remove(trackedPlayers.Find(player => player.Id == playerId));
+
+                await File.WriteAllTextAsync(
+                    "trackedplayers.json", JsonSerializer.Serialize(trackedPlayers));
 
                 await this.Context.Channel.SendMessageAsync("Player was removed from tracking.");
 

@@ -1,9 +1,12 @@
 ﻿using System;
-using System.Configuration;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Bot.Api.Objects;
+using Bot.Bot.FileObjects;
 using Discord;
 using Discord.Commands;
 
@@ -34,22 +37,31 @@ namespace Bot.Bot.Modules
                 return;
             }
 
-            Configuration playerNames = HelpFunctions.LoadPlayerNames();
+            List<PlayerInformation> playerInformationList = PlayerInformation.FromJson();
 
-            bool exists = playerNames.AppSettings.Settings.AllKeys!.Any(k => k == playerId.ToString());
+            bool exists = playerInformationList!.Any(playerInformation => playerInformation.Id == playerId);
 
             string playerName;
 
             if (exists)
             {
-                playerName = playerNames.AppSettings.Settings[playerId.ToString()].Value!;
+                playerName = playerInformationList!.Find(
+                    playerInformation => playerInformation.Id == playerId).Name;
             }
             else
             {
                 Player player = await api.GetPlayerAsync(playerId);
                 playerName = player.PlayerInfo.PlayerName;
-                playerNames.AppSettings.Settings.Add(playerId.ToString(), playerName);
-                playerNames.Save();
+
+                playerInformationList.Add(new PlayerInformation
+                {
+                    Id = playerId,
+                    Name = player.PlayerInfo.PlayerName,
+                    Rank = player.PlayerInfo.Rank,
+                });
+
+                await File.WriteAllTextAsync(
+                    "playerinformation.json", JsonSerializer.Serialize(playerInformationList));
             }
 
             EmbedBuilder embedBuilder = new ()
@@ -125,14 +137,15 @@ namespace Bot.Bot.Modules
         [Command("top")]
         public async Task MeTopAsync()
         {
-            Configuration players = HelpFunctions.LoadPlayers();
+            List<LinkedPlayer> linkedPlayers = LinkedPlayer.FromJson();
 
-            bool exists = players.AppSettings.Settings.AllKeys!
-                .Any(k => k == this.Context.Message.Author.Id.ToString());
+            bool exists = linkedPlayers!.Any(player => player.DiscordId == this.Context.Message.Author.Id);
 
             if (exists)
             {
-                long id = long.Parse(players.AppSettings.Settings[this.Context.Message.Author.Id.ToString()].Value!);
+                long id = linkedPlayers!.Find(
+                    player => player.DiscordId == this.Context.Message.Author.Id).ScoreSaberId;
+
                 await this.TopAsync(id);
             }
             else

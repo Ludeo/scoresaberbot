@@ -1,7 +1,10 @@
 ﻿using System;
-using System.Configuration;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Bot.Bot.FileObjects;
 using Discord.Commands;
 
 namespace Bot.Bot.Modules
@@ -19,29 +22,30 @@ namespace Bot.Bot.Modules
         [Command("link")]
         public async Task LinkAsync(long playerId)
         {
-            Configuration players = HelpFunctions.LoadPlayers();
+            List<LinkedPlayer> linkedPlayers = LinkedPlayer.FromJson();
 
-            string id = this.Context.Message.Author.Id.ToString();
+            ulong id = this.Context.Message.Author.Id;
 
-            KeyValueConfigurationCollection settings = players.AppSettings.Settings;
-            bool exists = settings.AllKeys!.Any(k => k == id);
+            bool exists = linkedPlayers!.Any(player => player.DiscordId == id);
 
             if (exists)
             {
-                settings.Remove(id);
+                linkedPlayers.Remove(linkedPlayers.Find(player => player.DiscordId == id));
             }
 
-            settings.Add(id, playerId.ToString());
-            players.Save();
+            linkedPlayers.Add(new LinkedPlayer { ScoreSaberId = playerId, DiscordId = id });
 
-            await this.Context.Channel.SendMessageAsync($"Successfully {(exists ? "updated" : "added")} your linked score saber id");
+            await File.WriteAllTextAsync("linkedplayers.json", JsonSerializer.Serialize(linkedPlayers));
+
+            await this.Context.Channel.SendMessageAsync(
+                $"Successfully {(exists ? "updated" : "added")} your linked score saber id");
         }
 
         /// <inheritdoc cref="LinkAsync(long)"/>
         [Command("link")]
         public async Task LinkAsync(string link)
         {
-            Uri uri = new (link);
+            Uri uri = new (link!);
             string idSegment = uri.Segments[2];
 
             if (uri.Host != "new.scoresaber.com" || uri.Host != "scoresaber.com")
@@ -50,7 +54,8 @@ namespace Bot.Bot.Modules
             }
             else if (!long.TryParse(idSegment, out long playerId))
             {
-                await this.Context.Channel.SendMessageAsync("Incorrect link, please make sure you are posting the correct link.");
+                await this.Context.Channel.SendMessageAsync(
+                    "Incorrect link, please make sure you are posting the correct link.");
             }
             else
             {

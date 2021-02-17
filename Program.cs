@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Configuration;
 using System.Threading;
 using System.Threading.Tasks;
 using Bot.Bot;
+using Bot.Bot.FileObjects;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;

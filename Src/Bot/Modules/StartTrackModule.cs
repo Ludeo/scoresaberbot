@@ -1,10 +1,13 @@
 ﻿using System;
-using System.Configuration;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Timers;
 using Bot.Api.Objects;
+using Bot.Bot.FileObjects;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -49,37 +52,42 @@ namespace Bot.Bot.Modules
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
             Api.Objects.Api api = Program.GetApi();
-            Configuration trackedPlayers = HelpFunctions.LoadTrackedPlayers();
+            List<TrackedPlayer> trackedPlayers = TrackedPlayer.FromJson();
+            List<PlayerInformation> playerInformationList = PlayerInformation.FromJson();
 
-            foreach (string playerId in trackedPlayers.AppSettings.Settings.AllKeys)
+            foreach (TrackedPlayer trackedPlayer in trackedPlayers)
             {
-                RecentScores recentScores = api.GetRecentScoresOfPlayerAsync(long.Parse(playerId!)).Result;
+                RecentScores recentScores = api.GetRecentScoresOfPlayerAsync(trackedPlayer.Id).Result;
                 ScoreObject score = recentScores.Scores[0];
 
                 DateTime recentTime = DateTime.Parse(score.TimeSet!);
-                DateTime oldTime = DateTime.Parse(trackedPlayers.AppSettings.Settings[playerId].Value!);
+                DateTime oldTime = DateTime.Parse(trackedPlayer.LastScore!);
+
+                long playerId = trackedPlayer.Id;
 
                 if (oldTime.CompareTo(recentTime) == -1)
                 {
-                    trackedPlayers.AppSettings.Settings[playerId].Value = score.TimeSet;
-                    trackedPlayers.Save();
+                    trackedPlayer.LastScore = score.TimeSet;
 
-                    Configuration playerNames = HelpFunctions.LoadPlayerNames();
-
-                    bool exists = playerNames.AppSettings.Settings.AllKeys!.Any(k => k == playerId);
+                    bool exists = playerInformationList!.Any(playerInformation => playerInformation.Id == playerId);
 
                     string playerName;
 
                     if (exists)
                     {
-                        playerName = playerNames.AppSettings.Settings[playerId].Value!;
+                        playerName = playerInformationList
+                                     .Find(playerInformation => playerInformation.Id == playerId).Name;
                     }
                     else
                     {
-                        Player player = api.GetPlayerAsync(long.Parse(playerId)).Result;
+                        Player player = api.GetPlayerAsync(playerId).Result;
                         playerName = player.PlayerInfo.PlayerName;
-                        playerNames.AppSettings.Settings.Add(playerId, playerName);
-                        playerNames.Save();
+                        playerInformationList.Add(new PlayerInformation
+                        {
+                            Id = playerId,
+                            Name = player.PlayerInfo.PlayerName,
+                            Rank = player.PlayerInfo.Rank,
+                        });
                     }
 
                     EmbedBuilder embedBuilder = new ()
@@ -103,11 +111,11 @@ namespace Bot.Bot.Modules
 
                     NumberFormatInfo numberFormatInfo = new () { NumberGroupSeparator = "," };
 
-                    embedBuilder.AddField("PP", score.Pp.ToString("#,#", numberFormatInfo), true);
+                    embedBuilder.AddField("PP", score.Pp.ToString("#,#.##", numberFormatInfo), true);
 
                     embedBuilder.AddField(
                         "Weighted PP",
-                        (Math.Round(score.Pp * score.Weight * 100) / 100).ToString("#,#.##"),
+                        (Math.Round(score.Pp * score.Weight * 100) / 100).ToString("#,#.##", numberFormatInfo),
                         true);
 
                     embedBuilder.AddField(
@@ -154,6 +162,10 @@ namespace Bot.Bot.Modules
                                                .SendMessageAsync(string.Empty, false, embedBuilder.Build());
                 }
             }
+
+            File.WriteAllText("playerinformation.json", JsonSerializer.Serialize(playerInformationList));
+
+            File.WriteAllText("trackedplayers.json", JsonSerializer.Serialize(trackedPlayers));
         }
     }
 }

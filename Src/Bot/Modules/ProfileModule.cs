@@ -1,9 +1,12 @@
 ﻿using System;
-using System.Configuration;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Bot.Api.Objects;
+using Bot.Bot.FileObjects;
 using Discord;
 using Discord.Commands;
 
@@ -26,40 +29,30 @@ namespace Bot.Bot.Modules
 
             Player player = await api.GetPlayerAsync(playerId);
 
-            Configuration playerNames = HelpFunctions.LoadPlayerNames();
+            List<PlayerInformation> playerInformationList = PlayerInformation.FromJson();
 
-            if (playerNames.AppSettings.Settings.AllKeys!.Any(x => x == player.PlayerInfo.PlayerId))
+            if (playerInformationList!.Any(
+                playerInfo => playerInfo.Id == long.Parse(player.PlayerInfo.PlayerId!)))
             {
-                if (playerNames.AppSettings.Settings[player.PlayerInfo.PlayerId].Value != player.PlayerInfo.PlayerName)
-                {
-                    playerNames.AppSettings.Settings.Remove(player.PlayerInfo.PlayerId);
-                    playerNames.AppSettings.Settings.Add(player.PlayerInfo.PlayerId, player.PlayerInfo.PlayerName);
-                }
+                PlayerInformation playerInformation =
+                    playerInformationList.Find(
+                        playerInfo => playerInfo.Id == long.Parse(player.PlayerInfo.PlayerId!));
+
+                playerInformation.Name = player.PlayerInfo.PlayerName;
+                playerInformation.Rank = player.PlayerInfo.Rank;
             }
             else
             {
-                playerNames.AppSettings.Settings.Add(player.PlayerInfo.PlayerId, player.PlayerInfo.PlayerName);
-            }
-
-            playerNames.Save();
-
-            Configuration playerRanks = HelpFunctions.LoadPlayerRanks();
-
-            if (playerRanks.AppSettings.Settings.AllKeys!.Any(x => x == player.PlayerInfo.PlayerId))
-            {
-                if (int.Parse(playerRanks.AppSettings.Settings[player.PlayerInfo.PlayerId].Value!)
-                    != player.PlayerInfo.Rank)
+                playerInformationList.Add(new PlayerInformation
                 {
-                    playerRanks.AppSettings.Settings.Remove(player.PlayerInfo.PlayerId);
-                    playerRanks.AppSettings.Settings.Add(player.PlayerInfo.PlayerId, player.PlayerInfo.Rank.ToString());
-                }
-            }
-            else
-            {
-                playerRanks.AppSettings.Settings.Add(player.PlayerInfo.PlayerId, player.PlayerInfo.Rank.ToString());
+                    Id = playerId,
+                    Name = player.PlayerInfo.PlayerName,
+                    Rank = player.PlayerInfo.Rank,
+                });
             }
 
-            playerRanks.Save();
+            await File.WriteAllTextAsync(
+                "playerinformation.json", JsonSerializer.Serialize(playerInformationList));
 
             NumberFormatInfo numberFormatInfo = new () { NumberGroupSeparator = "," };
 
@@ -145,19 +138,22 @@ namespace Bot.Bot.Modules
         [Command("profile")]
         public async Task MeProfileAsync()
         {
-            Configuration players = HelpFunctions.LoadPlayers();
+            List<LinkedPlayer> linkedPlayers = LinkedPlayer.FromJson();
 
-            bool exists = players.AppSettings.Settings.AllKeys!
-                .Any(k => k == this.Context.Message.Author.Id.ToString());
+            bool exists = linkedPlayers!
+                .Any(player => player.DiscordId == this.Context.Message.Author.Id);
 
             if (exists)
             {
-                long id = long.Parse(players.AppSettings.Settings[this.Context.Message.Author.Id.ToString()].Value!);
+                long id = linkedPlayers.Find(player => player.DiscordId == this.Context.Message.Author.Id)
+                                        .ScoreSaberId;
+
                 await this.ProfileAsync(id);
             }
             else
             {
                 string prefix = Config.Default.Prefix;
+
                 await this.Context.Channel.SendMessageAsync(
                     $"You don't have your score saber account linked to your discord profile. Use " +
                     $"\"{prefix}help link\" for more information or use \"{prefix}profile [scoresaberid]\" instead");

@@ -1,6 +1,6 @@
-﻿using System.Configuration;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Timers;
+using Bot.Bot.FileObjects;
 using Discord.Commands;
 
 namespace Bot.Bot.Modules

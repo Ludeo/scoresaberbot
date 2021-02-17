@@ -1,5 +1,5 @@
-﻿using System.Configuration;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Bot.Bot.FileObjects;
 using Discord;
 using Discord.Commands;
 

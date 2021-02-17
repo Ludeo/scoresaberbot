@@ -1,9 +1,12 @@
 ﻿using System;
-using System.Configuration;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Bot.Api.Objects;
+using Bot.Bot.FileObjects;
 using Discord;
 using Discord.Commands;
 
@@ -34,22 +37,29 @@ namespace Bot.Bot.Modules
                 return;
             }
 
-            Configuration playerNames = HelpFunctions.LoadPlayerNames();
+            List<PlayerInformation> playerInformationList = PlayerInformation.FromJson();
 
-            bool exists = playerNames.AppSettings.Settings.AllKeys!.Any(k => k == playerId.ToString());
+            bool exists = playerInformationList!.Any(playerInformation => playerInformation.Id == playerId);
 
             string playerName;
 
             if (exists)
             {
-                playerName = playerNames.AppSettings.Settings[playerId.ToString()].Value!;
+                playerName = playerInformationList.Find(playerInformation => playerInformation.Id == playerId).Name;
             }
             else
             {
                 Player player = await api.GetPlayerAsync(playerId);
                 playerName = player.PlayerInfo.PlayerName;
-                playerNames.AppSettings.Settings.Add(playerId.ToString(), playerName);
-                playerNames.Save();
+                playerInformationList.Add(new PlayerInformation
+                {
+                    Id = long.Parse(player.PlayerInfo.PlayerId!),
+                    Name = playerName,
+                    Rank = player.PlayerInfo.Rank,
+                });
+
+                await File.WriteAllTextAsync(
+                    "playerinformation.json", JsonSerializer.Serialize(playerInformationList));
             }
 
             EmbedBuilder embedBuilder = new ()
@@ -73,11 +83,11 @@ namespace Bot.Bot.Modules
 
             NumberFormatInfo numberFormatInfo = new () { NumberGroupSeparator = "," };
 
-            embedBuilder.AddField("PP", score.Pp.ToString("#,#", numberFormatInfo), true);
+            embedBuilder.AddField("PP", score.Pp.ToString("#,#.##", numberFormatInfo), true);
 
             embedBuilder.AddField(
                 "Weighted PP",
-                (Math.Round(score.Pp * score.Weight * 100) / 100).ToString("#,#.##"),
+                (Math.Round(score.Pp * score.Weight * 100) / 100).ToString("#,#.##", numberFormatInfo),
                 true);
 
             embedBuilder.AddField(
@@ -125,14 +135,16 @@ namespace Bot.Bot.Modules
         [Command("recent")]
         public async Task MeRecentAsync()
         {
-            Configuration players = HelpFunctions.LoadPlayers();
+            List<LinkedPlayer> linkedPlayers = LinkedPlayer.FromJson();
 
-            bool exists = players.AppSettings.Settings.AllKeys!
-                .Any(k => k == this.Context.Message.Author.Id.ToString());
+            bool exists = linkedPlayers!
+                .Any(player => player.DiscordId == this.Context.Message.Author.Id);
 
             if (exists)
             {
-                long id = long.Parse(players.AppSettings.Settings[this.Context.Message.Author.Id.ToString()].Value!);
+                long id = linkedPlayers.Find(player => player.DiscordId == this.Context.Message.Author.Id)
+                                       .ScoreSaberId;
+
                 await this.RecentAsync(id);
             }
             else

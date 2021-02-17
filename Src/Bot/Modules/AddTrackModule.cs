@@ -1,8 +1,11 @@
 ﻿using System;
-using System.Configuration;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Bot.Api.Objects;
+using Bot.Bot.FileObjects;
 using Discord.Commands;
 
 namespace Bot.Bot.Modules
@@ -27,9 +30,9 @@ namespace Bot.Bot.Modules
                 return;
             }
 
-            Configuration trackedPlayers = HelpFunctions.LoadTrackedPlayers();
+            List<TrackedPlayer> trackedPlayers = TrackedPlayer.FromJson();
 
-            if (trackedPlayers.AppSettings.Settings.AllKeys!.Any(id => id == playerId.ToString()))
+            if (trackedPlayers!.Any(player => player.Id == playerId))
             {
                 await this.Context.Channel.SendMessageAsync("This player is already getting tracked");
 
@@ -38,23 +41,31 @@ namespace Bot.Bot.Modules
 
             Api.Objects.Api api = Program.GetApi();
 
-            Configuration playerNames = HelpFunctions.LoadPlayerNames();
+            List<PlayerInformation> playerInformation = PlayerInformation.FromJson();
 
-            if (playerNames.AppSettings.Settings.AllKeys!.All(id => id != playerId.ToString()))
+            if (playerInformation!.All(playerInfo => playerInfo.Id != playerId))
             {
                 Player player = await api.GetPlayerAsync(playerId);
 
-                playerNames.AppSettings.Settings.Add(playerId.ToString(), player.PlayerInfo.PlayerName);
-                playerNames.Save();
+                playerInformation.Add(
+                    new PlayerInformation
+                    {
+                        Id = playerId,
+                        Name = player.PlayerInfo.PlayerName,
+                        Rank = player.PlayerInfo.Rank,
+                    });
+
+                await File.WriteAllTextAsync(
+                    "playerinformation.json", JsonSerializer.Serialize(playerInformation));
             }
 
             DateTime timeNow = DateTime.Now;
 
             string timeNowConverted = timeNow.ToString("yyyy-MM-ddThh:mm:ss.fffZ");
 
-            trackedPlayers.AppSettings.Settings.Add(playerId.ToString(), timeNowConverted);
+            trackedPlayers.Add(new TrackedPlayer { Id = playerId, LastScore = timeNowConverted });
 
-            trackedPlayers.Save();
+            await File.WriteAllTextAsync("trackedplayers.json", JsonSerializer.Serialize(trackedPlayers));
 
             await this.Context.Channel.SendMessageAsync(
                 "The player with the id " + playerId + " is now getting tracked");
